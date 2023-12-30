@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Product;
+use App\Models\Shipment;
+use App\Models\TransactionDetail;
+use App\Models\TransactionHeader;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+
+class CartController extends Controller
+{
+    public function store(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $variant_id = $request->variant_id;
+        $product_id = $request->product_id;
+        $quantity = $request->product_quantity;
+
+        $validated = $request->validate([
+            'variant_id' => 'required',
+            'product_id' => 'required',
+            'product_quantity' => 'required',
+        ]);
+
+        $cart = Cart::where('user_id', $user_id)->where('variant_id', $variant_id)->where('product_id', $product_id)->first();
+        // $variant = ProductVariant::find($variant_id);
+
+        // if ($quantity > $variant->stock) {
+        //     return redirect()->back();
+        // }
+
+        if ($cart == null) {
+            Cart::create([
+                'user_id' => $user_id,
+                'variant_id' => $variant_id,
+                'product_id' => $product_id,
+                'quantity' => $quantity,
+            ]);
+        } else {
+            // $quantity += $cart->quantity;
+
+            // if ($quantity > $variant->stock) {
+            //     $quantity = $variant->stock;
+            // }
+
+            Cart::where('user_id', $user_id)->where('variant_id', $variant_id)->where('product_id', $product_id)->update(['quantity' => $quantity]);
+        }
+        // $variant->stock -= $quantity;
+        // $variant->save();
+
+        return redirect()->route('cart.index');
+    }
+
+    public function index(Request $request)
+    {
+        $products = Product::paginate(6);
+        $recommendations = Product::all()->random(5);
+
+        if ($request->ajax()) {
+            $view = view('product.load', compact('products'))->render();
+            return Response::json(['view' => $view, 'nextPageUrl' => $products->nextPageUrl()]);
+        }
+
+        return view('cart.index', [
+            'recommendations' => $recommendations,
+            'products' => $products,
+        ]);
+    }
+
+    public function checkout_index()
+    {
+        if (Auth::user()->carts->count() == 0) {
+            return redirect()->route('cart.index');
+        } else if (Auth::user()->locations->count() == 0) {
+            return redirect()->route('locations.index');
+        }
+
+        $recommendations = Product::all()->random(5);
+        $shipments = Shipment::all();
+
+        return view('cart.checkout', [
+            'recommendations' => $recommendations,
+            'shipments' => $shipments,
+        ]);
+    }
+
+    public function checkout_store(Request $request)
+    {
+        $validated = $request->validate([
+            'user-location-id' => 'required',
+            'transaction_details' => 'required',
+        ]);
+
+        $location_id = $request->input('user-location-id');
+        $date = now();
+
+        $th = TransactionHeader::create([
+            'user_id' => Auth::user()->id,
+            'location_id' => $location_id,
+            'date' => $date,
+        ]);
+
+        // echo $th->id;
+
+        $td = json_decode($request->transaction_details, true);
+
+        // var_dump($td['9af71d57-7ec8-480e-adfe-352a5c1a0979']['9af71d64-e37e-4e5d-beba-a48b9f86a629']['shipment_id']);
+        foreach (Auth::user()->carts as $cart) {
+            TransactionDetail::create([
+                'transaction_id' => $th->id,
+                'product_id' => $cart->product_id,
+                'variant_id' => $cart->variant_id,
+                'quantity'=> $cart->quantity,
+                'price' => $cart->variant->price,
+                'shipment_id' => $td[$cart->product_id][$cart->variant_id]['shipment_id'],
+                'status' => 'Pending',
+                'promo_name' => $cart->product->lowestPromo()->promo->promo_name,
+                'discount' => $cart->product->lowestDiscount(),
+                'total_paid' => $td[$cart->product_id][$cart->variant_id]['total_paid'],
+            ]);
+        }
+
+        Cart::where('user_id', Auth::user()->id)->delete();
+
+        return redirect()->route('cart.index');
+    }
+}
