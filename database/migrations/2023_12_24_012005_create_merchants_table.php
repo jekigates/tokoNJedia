@@ -19,13 +19,13 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->string('phone');
-            $table->string('image');
-            $table->string('catch_phrase');
+            $table->string('image')->nullable();
+            $table->string('catch_phrase')->nullable();
             $table->string('process_time')->nullable();
             $table->string('operational_time')->nullable();
-            $table->string('banner_image');
-            $table->string('description');
-            $table->string('full_description');
+            $table->string('banner_image')->nullable();
+            $table->string('description')->nullable();
+            $table->string('full_description')->nullable();
             $table->timestamps();
         });
     }

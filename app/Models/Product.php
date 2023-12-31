@@ -62,4 +62,14 @@ class Product extends Model
 
         return 0;
     }
+
+    public function transaction_details()
+    {
+        return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function soldCount()
+    {
+        return $this->transaction_details->count();
+    }
 }

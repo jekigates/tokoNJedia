@@ -18,14 +18,14 @@
             @endif
         </div>
         <div class="p-2 text-sm">
-            <p class="text-black">{{ $product->name }}</p>
+            <p class="text-black">@str_limit($product->name)</p>
             <p class="font-bold text-black">@money($product->lowestPriceVariant()->price - ($product->lowestPriceVariant()->price * $discount / 100))</p>
             @if ($discount != 0)
                 <p><strike class="text-gray">@money($product->lowestPriceVariant()->price)</strike> <span class="text-red font-bold">{{ $discount }}%</span></p>
             @endif
             <div class="text-gray">
-                <p >{{ $product->merchant->name }}</p>
-                <p>0 | Terjual</p>
+                <p >@str_limit($product->merchant->name)</p>
+                <p>{{ $product->soldCount() }} | Terjual</p>
             </div>
         </div>
     </div>

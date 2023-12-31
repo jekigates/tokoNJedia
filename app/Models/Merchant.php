@@ -10,6 +10,12 @@ class Merchant extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        'user_id',
+        'name',
+        'phone',
+    ];
+
     public function location()
     {
         return $this->hasOne(Location::class, 'locationable_id', 'id');
@@ -23,5 +29,10 @@ class Merchant extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function getImage()
+    {
+        return ($this->image == null) ? 'img/logo/logo.png' : $this->image;
     }
 }

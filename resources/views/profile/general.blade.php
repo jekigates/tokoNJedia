@@ -23,7 +23,7 @@
 
                     <div class="mb-8">
                         <x-form.label for="username">Username</x-form.label>
-                        <x-form.input type="text" name="username" id="username" value="{{ Auth::user()->username }}" required />
+                        <x-form.input type="text" name="username" id="username" value="{{ Auth::user()->username }}" required/>
                         <x-form.text>Username could be seen by others</x-form.text>
                     </div>
                     <x-button type="submit" variant="primary" block>Save</x-button>
@@ -35,7 +35,7 @@
 
                     <div class="mb-8">
                         <x-form.label for="dob">Date of birth</x-form.label>
-                        <x-form.input type="date" name="dob" id="dob" value="{{ Auth::user()->dob }}" required />
+                        <x-form.input type="date" name="dob" id="dob" value="{{ Auth::user()->dob }}" required/>
                         <x-form.text>1 January 1970 - 31 December 2009</x-form.text>
                     </div>
                     <x-button type="submit" variant="primary" block>Save</x-button>
@@ -75,7 +75,7 @@
 
                     <div class="mb-8">
                         <x-form.label for="phone">Phone</x-form.label>
-                        <x-form.input type="tel" name="phone" id="phone" value="{{ Auth::user()->phone }}" required />
+                        <x-form.input type="text" name="phone" id="phone" minlength="12" maxlength="12" pattern="[0-9]{12}" value="{{ Auth::user()->phone }}" placeholder="ex. 081234567891" required/>
                     </div>
                     <x-button type="submit" variant="primary" block>Save</x-button>
                 </form>

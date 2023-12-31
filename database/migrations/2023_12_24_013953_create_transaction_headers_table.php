@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('transaction_headers', function (Blueprint $table) {
             $table->char('id', 36)->primary();
             $table->char('user_id', 36);
-            $table->char('location_id', 36);
+            $table->char('location_id', 36)->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('location_id')->references('id')->on('locations');
             $table->timestamp('date');

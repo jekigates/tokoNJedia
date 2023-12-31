@@ -27,11 +27,17 @@ class MerchantFactory extends Factory
             'image' => function () {
                 $filename = uniqid() . '.jpg';
 
-                Storage::disk('public')->put('merchant-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
+                $image = Storage::disk('public')->put('merchant/images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
 
-                return 'storage/merchant-images/' . $filename;
+                return 'storage/merchant/images/' . $filename;
             },
-            'banner_image' => $this->faker->image(),
+            'banner_image' => function () {
+                $filename = uniqid() . '.jpg';
+
+                $image = Storage::disk('public')->put('merchant/banner-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
+
+                return 'storage/merchant/banner-images/' . $filename;
+            },
             'description' => $this->faker->text(50),
             'catch_phrase' => $this->faker->words(10, true),
             'full_description' => $this->faker->sentence(18),

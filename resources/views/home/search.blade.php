@@ -44,25 +44,29 @@
 
         @if ($sMerchants->count() > 0)
             <section class="hidden tab-section" id="section-shop">
-                <div class="flex gap-4">
+                <div class="flex flex-wrap -m-2">
                     @foreach ($sMerchants as $sMerchant)
-                        <div class="w-1/3 border border-gray-light rounded-lg p-4">
-                            <div class="flex items-center gap-4 mb-4">
-                                <img src="{{ asset($sMerchant->image) }}" alt="" class="h-14 w-14 object-cover rounded-full">
-                                <div>
-                                    <p class="font-bold text-black">{{ $sMerchant->name }}</p>
-                                    <p class="text-xs text-gray">{{ $sMerchant->location->city }}</p>
+                        <div class="w-1/3 p-2">
+                            <div class="border border-gray-light rounded-lg p-4">
+                                <div class="flex items-center gap-4">
+                                    <img src="{{ asset($sMerchant->getImage()) }}" alt="" class="h-14 w-14 object-cover rounded-full">
+                                    <div>
+                                        <p class="font-bold text-black">@str_limit($sMerchant->name)</p>
+                                        <p class="text-xs text-gray">@str_limit($sMerchant->location->city)</p>
+                                    </div>
+                                    <x-button variant="primary" outline class="ms-auto">View Shop</x-button>
                                 </div>
-                                <x-button variant="primary" outline class="ms-auto">View Shop</x-button>
-                            </div>
 
-                            <div class="flex gap-4">
-                                @foreach ($sMerchant->products->take(3) as $sMerchant_product)
-                                    <a href="{{ route('products.show', ['id' => $sMerchant_product->id]) }}" class="w-1/3">
-                                        <img src="{{ asset($sMerchant_product->images[0]->image) }}" alt="" class="w-full h-24 object-cover mb-2 rounded-lg">
-                                        <p class="font-semibold text-sm">@money($sMerchant_product->variants->min('price'))</p>
-                                    </a>
-                                @endforeach
+                                @if ($sMerchant->products->count() > 0)
+                                    <div class="flex gap-4 mt-4">
+                                        @foreach ($sMerchant->products->take(3) as $sMerchant_product)
+                                            <a href="{{ route('products.show', ['id' => $sMerchant_product->id]) }}" class="w-1/3">
+                                                <img src="{{ asset($sMerchant_product->images[0]->image) }}" alt="" class="w-full h-24 object-cover mb-2 rounded-lg">
+                                                <p class="font-semibold text-sm">@money($sMerchant_product->variants->min('price'))</p>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endforeach

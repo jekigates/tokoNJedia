@@ -10,6 +10,7 @@ use App\Models\ProductPromo;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $directories = Storage::disk('public')->directories();
+
+        foreach ($directories as $directory) {
+            Storage::disk('public')->deleteDirectory($directory);
+        }
 
         $this->call([
             ShipmentSeeder::class,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\ElectricTransactionDetail;
 use App\Models\Product;
 use App\Models\Shipment;
 use App\Models\TransactionDetail;
@@ -11,6 +12,7 @@ use App\Models\TransactionHeader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
@@ -105,12 +107,20 @@ class CartController extends Controller
             'date' => $date,
         ]);
 
-        // echo $th->id;
-
         $td = json_decode($request->transaction_details, true);
 
-        // var_dump($td['9af71d57-7ec8-480e-adfe-352a5c1a0979']['9af71d64-e37e-4e5d-beba-a48b9f86a629']['shipment_id']);
         foreach (Auth::user()->carts as $cart) {
+            $discount = $cart->product->lowestDiscount();
+            $promo_name = null;
+
+            if ($discount != 0) {
+                if ($cart->product->flash_sale != null) {
+                    $promo_name = 'Flash Sale';
+                } else {
+                    $promo_name = $cart->product->lowestPromo()->promo->promo_name;
+                }
+            }
+
             TransactionDetail::create([
                 'transaction_id' => $th->id,
                 'product_id' => $cart->product_id,
@@ -119,8 +129,8 @@ class CartController extends Controller
                 'price' => $cart->variant->price,
                 'shipment_id' => $td[$cart->product_id][$cart->variant_id]['shipment_id'],
                 'status' => 'Pending',
-                'promo_name' => $cart->product->lowestPromo()->promo->promo_name,
-                'discount' => $cart->product->lowestDiscount(),
+                'promo_name' => $promo_name,
+                'discount' => $discount,
                 'total_paid' => $td[$cart->product_id][$cart->variant_id]['total_paid'],
             ]);
         }
@@ -128,5 +138,28 @@ class CartController extends Controller
         Cart::where('user_id', Auth::user()->id)->delete();
 
         return redirect()->route('cart.index');
+    }
+
+    public function bill_store(Request $request)
+    {
+        $validated = $request->validate([
+            'subscription_number' => ['required', 'numeric', 'digits_between:11,12'],
+            'nominal' => ['required', 'numeric', 'min:10000', 'max:50000'],
+        ]);
+
+        $th = TransactionHeader::create([
+            'user_id' => Auth::user()->id,
+            'location_id' => null,
+            'date' => now(),
+        ]);
+
+        ElectricTransactionDetail::create([
+            'transaction_id' => $th->id,
+            'electric_token' => Str::uuid(),
+            'subscription_number' => $request->subscription_number,
+            'nominal' => $request->nominal,
+        ]);
+
+        return redirect()->route('history-transaction.index');
     }
 }

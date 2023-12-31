@@ -25,7 +25,7 @@ return new class extends Migration
             $table->char('shipment_id', 36);
             $table->foreign('shipment_id')->references('id')->on('shipments');
             $table->string('status');
-            $table->string('promo_name');
+            $table->string('promo_name')->nullable();
             $table->integer('discount');
             $table->integer('total_paid');
             $table->timestamps();

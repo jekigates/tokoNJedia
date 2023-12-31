@@ -67,27 +67,29 @@
                 @foreach ($categories as $key => $category)
                     <div class="flex-1 p-4 border border-gray-light text-center rounded-md">
                         <img src="{{ $category->products[0]->images[0]->image }}" alt="" class="block w-full aspect-[4/3] rounded-md object-cover mb-2">
-                        <p class="text-sm font-semibold text-black">{{ $category->products[0]->name }}</p>
+                        <p class="text-sm font-semibold text-black">@str_limit($category->products[0]->name, 10)</p>
                     </div>
                 @endforeach
             </div>
         </div>
-        <div class="w-1/2">
+        <form action="{{ route('bill.store') }}" method="POST" class="w-1/2">
+            @csrf
+
             <p class="text-xl font-bold mb-4 text-black">Top up & Bills</p>
 
             <div class="mb-4">
                 <x-form.label for="subscription_number">Subscription Number</x-form.label>
-                <x-form.input name="subscription_number" id="subscription_number" type="number" value="{{ old('subscription_number') }}" placeholder="ex. 12345678910" />
+                <x-form.input name="subscription_number" id="subscription_number" type="text" min="100000000" max="999999999999" minlength="11" maxlength="12" pattern="[0-9]{11-12}" value="{{ old('subscription_number') }}" placeholder="ex. 12345678910" required/>
                 <x-form.text>Must be between 11 and 12 numbers</x-form.text>
             </div>
 
             <div class="mb-4">
                 <x-form.label for="nominal">Nominal</x-form.label>
-                <x-form.input name="nominal" id="nominal" type="number" value="{{ old('nominal') }}" placeholder="ex. 50000" />
+                <x-form.input name="nominal" id="nominal" type="number" value="{{ old('nominal') }}" placeholder="ex. 50000" required min="10000" max="1000000"/>
                 <x-form.text>Must be between 10000 and 1000000</x-form.text>
             </div>
-            <x-button variant="primary" block>Pay</x-button>
-        </div>
+            <x-button type="submit" variant="primary" block>Pay</x-button>
+        </form>
     </section>
 
     @php
@@ -100,7 +102,7 @@
             <p class="text-sm font-bold">Flash Sale</p>
             <div class="flex items-end gap-4 mb-12">
                 <p class="text-xl font-bold">Chasing Old Date Discount</p>
-                <p class="flex items-end gap-2 text-gray">Ends in <span class="text-white px-2 py-1 bg-red rounded-md" id=hour-left>{{ str_pad($hourLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red-500 rounded-md" id="minute-left">{{ str_pad($minuteLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red-500 rounded-md" id="second-left">{{ str_pad($secondLeft, 2, '0', STR_PAD_LEFT) }}</span></p>
+                <p class="flex items-end gap-2 text-gray">Ends in <span class="text-white px-2 py-1 bg-red rounded-md" id=hour-left>{{ str_pad($hourLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red rounded-md" id="minute-left">{{ str_pad($minuteLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red rounded-md" id="second-left">{{ str_pad($secondLeft, 2, '0', STR_PAD_LEFT) }}</span></p>
             </div>
             <div class="flex flex-wrap relative flex-row-reverse mb-6 -m-2">
                 <div class="bg-green-100 absolute left-2 px-12 top-1/2 -translate-y-1/2 rounded-lg w-80">
@@ -143,8 +145,8 @@
                         }
                     }
 
-                    hourLeft = 24 - d.getHours();
-                    minuteLeft = 60 - d.getMinutes();
+                    hourLeft = 24 - d.getHours() - 1;
+                    minuteLeft = 60 - d.getMinutes() - 1;
                     secondLeft = 60 - d.getSeconds();
                 }, 1000);
             }

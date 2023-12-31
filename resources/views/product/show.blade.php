@@ -29,7 +29,7 @@
         <div class="w-1/2">
             <p class="font-bold text-2xl text-black" id="product-name">{{ $product->name }}</p>
             <p class="flex gap-2 text-sm items-center mb-4 text-black">
-                Sold 0 &#183;
+                Sold {{ $product->soldCount() }} &#183;
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -100,7 +100,7 @@
             </div>
             <div class="flex items-center gap-4 text-sm mb-16">
                 <img
-                    src="{{ asset($product->merchant->image) }}"
+                    src="{{ asset($product->merchant->getImage()) }}"
                     alt=""
                     class="rounded-full w-14 h-14"
                 />
@@ -146,7 +146,7 @@
                 <p class="mb-4 text-black">Atur Jumlah dan Catatan</p>
 
                 <div class="flex gap-4 items-center mb-4">
-                    <div class="inline-flex items-center border rounded-md">
+                    <div class="inline-flex items-center border border-gray-light rounded-md">
                         <button onclick="changeQty(this.innerHTML)" type="button" class="text-primary px-2 text-2xl">-</button>
                         <input
                             type="number"

@@ -37,7 +37,7 @@
                     </div>
                     <x-button variant="primary" onclick="moveTab()" block>Confirm Location</x-button>
                 </div>
-                <form class="hidden" id="tab-complete-address-detail" action="{{ route('locations.store') }}" method="POST">
+                <form class="hidden" id="tab-complete-address-detail" action="{{ route('locations.store') }}" method="POST" onsubmit="addNewAddress(event)">
                     @csrf
 
                     <p class="mb-4 text-lg font-bold text-black">Please Confirm this is your address?</p>
@@ -51,21 +51,21 @@
                     <div class="flex gap-4 mb-4">
                         <div class="w-1/3">
                             <x-form.label for="city">City</x-form.label>
-                            <x-form.input type="text" name="city" id="city" placeholder="ex. Jakarta" required />
+                            <x-form.input type="text" name="city" id="city" placeholder="ex. Jakarta" required/>
                         </div>
                         <div class="w-1/3">
                             <x-form.label for="country">Country</x-form.label>
-                            <x-form.input type="text" name="country" id="country" placeholder="ex. 12025" required />
+                            <x-form.input type="text" name="country" id="country" placeholder="ex. Indonesia" required/>
                         </div>
                         <div class="w-1/3">
                             <x-form.label for="postal_code">Postal Code</x-form.label>
-                            <x-form.input type="number" name="postal_code" id="postal_code" placeholder="ex. 12025" required />
+                            <x-form.input type="text" name="postal_code" id="postal_code" placeholder="ex. 12025" minlength="5" maxlength="5" pattern="[0-9]{5}" required/>
                         </div>
                     </div>
 
                     <div class="mb-8">
                         <x-form.label for="notes">Notes</x-form.label>
-                        <x-form.input type="text" name="notes" id="notes" placeholder="ex. Black Gate, White Building" required />
+                        <x-form.input type="text" name="notes" id="notes" placeholder="ex. Black Gate, White Building" required/>
                     </div>
                     <x-button type="submit" variant="primary" block>Add New Address</x-button>
                 </form>
@@ -109,16 +109,28 @@
 @push('scripts')
     <script>
         function moveTab() {
-            document.querySelector('#button-pinpoint-location').className = 'border border-primary bg-primary rounded-full text-white h-8 w-8 flex items-center justify-center mb-1';
-            document.querySelector('#tab-pinpoint-location').classList.add('hidden');
-            document.querySelector('#tab-complete-address-detail').classList.remove('hidden');
+            if (getLocation()) {
+                document.querySelector('#button-pinpoint-location').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>';
+                document.querySelector('#button-pinpoint-location').className = 'border border-primary bg-primary rounded-full text-white h-8 w-8 flex items-center justify-center mb-1';
+                document.querySelector('#tab-pinpoint-location').classList.add('hidden');
+                document.querySelector('#tab-complete-address-detail').classList.remove('hidden');
+            }
         }
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                alert("Your browser doesn't support or maybe you blocked the location permission.");
+        function addNewAddress(e) {
+            e.preventDefault();
+
+            if (getLocation()) {
+                e.target.submit();
+            }
+        }
+
+        function toggleModal()
+        {
+            if (getLocation()) {
+                var modal = document.querySelector('#modal');
+
+                $(modal).fadeToggle();
             }
         }
 
@@ -128,18 +140,7 @@
             });
             document.querySelectorAll(".longitude").forEach((element) => {
                 element.innerHTML = element.value = position.coords.longitude;
-            })
-        }
-
-        function toggleModal()
-        {
-            var modal = document.querySelector('#modal');
-
-            if (modal.classList.contains('hidden')) {
-                getLocation();
-            }
-
-            $(modal).fadeToggle();
+            });
         }
     </script>
 @endpush

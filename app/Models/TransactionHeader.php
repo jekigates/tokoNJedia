@@ -16,8 +16,18 @@ class TransactionHeader extends Model
         'date',
     ];
 
-    public function transaction_details()
+    public function details()
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
+    }
+
+    public function electrics()
+    {
+        return $this->hasMany(ElectricTransactionDetail::class, 'transaction_id', 'id');
+    }
+
+    public function electric()
+    {
+        return $this->electrics->where('created_at', $this->created_at)->first();
     }
 }
