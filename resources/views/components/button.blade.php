@@ -1,5 +1,5 @@
 @if($href)
-    <a href="{{ $href }}" {{ $attributes->merge(['class' => $buttonClasses()]) }}>
+    <a href="{{ $href }}" {{ $attributes->merge(['class' => $buttonClasses() . ' inline-flex']) }}>
         {{ $slot }}
     </a>
 @else

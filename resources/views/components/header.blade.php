@@ -31,14 +31,16 @@
 
         <div class="flex-grow">
             <form action="{{ route('home.search') }}" method="GET">
-                <input type="search" name="keyword" value="{{ Request::get('keyword') }}" placeholder="Search" class="w-full rounded-md px-4 py-2 border border-gray-light outline-none focus:border-primary mb-4">
+                <input type="search" name="keyword" value="{{ Request::get('keyword') }}" placeholder="Search" class="w-full rounded-md px-4 py-2 border border-gray-light outline-none focus:border-primary">
             </form>
 
-            <div class="flex gap-4 text-sm text-gray">
-                @foreach ($recommendations as $recommendation)
-                    <a href="{{ route('home.search', ['keyword' => $recommendation->name]) }}" name="keyword" class="hover:text-primary">{{ $recommendation->name }}</a>
-                @endforeach
-            </div>
+            @isset($recommendations)
+                <div class="flex gap-4 text-sm text-gray mt-4">
+                    @foreach ($recommendations as $recommendation)
+                        <a href="{{ route('home.search', ['keyword' => $recommendation->name]) }}" name="keyword" class="hover:text-primary">{{ $recommendation->name }}</a>
+                    @endforeach
+                </div>
+            @endisset
         </div>
 
         @if (Auth::check())

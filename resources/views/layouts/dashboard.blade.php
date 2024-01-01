@@ -2,7 +2,11 @@
 
 @section('root')
     <x-loading />
-    <x-header :recommendations='$recommendations' />
+    @isset($recommendations)
+        <x-header :recommendations='$recommendations' />
+    @else
+        <x-header />
+    @endisset
 
     <div class="py-8 flex justify-center">
         <div class="w-full max-w-screen-xl">
