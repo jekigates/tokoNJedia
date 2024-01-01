@@ -103,7 +103,7 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function location_delete($id)
+    public function location_destroy($id)
     {
         Location::find($id)->delete();
 

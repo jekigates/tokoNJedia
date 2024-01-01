@@ -29,3 +29,23 @@ function showPosition(position) {
 
     return address;
 }
+
+function openInputImage(inputId) {
+    var input = document.querySelector("#" + inputId);
+    input.click();
+}
+
+function validateInputImage(input, imgId) {
+    if (input.files.length === 0) {
+        return false;
+    }
+
+    if (input.files[0].size > 10000000) {
+        alert("File must not be more than 10 Megabytes.");
+        return false;
+    }
+
+    var img = document.querySelector("#" + imgId);
+    img.src = URL.createObjectURL(input.files[0]);
+    return true;
+}

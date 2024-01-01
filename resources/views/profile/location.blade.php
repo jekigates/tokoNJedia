@@ -46,7 +46,7 @@
                     <input type="hidden" name="longitude" class="longitude">
                     <div class="mb-4">
                         <x-form.label for="address">Address</x-form.label>
-                        <textarea name="address" id="address" class="block w-full rounded-md px-4 py-2 border border-gray-light focus:border-primary outline-none" placeholder="ex. New Kemanggisan Street No. 10 2F" cols="30" rows="2" required></textarea>
+                        <x-form.textarea name="address" id="address" placeholder="ex. New Kemanggisan Street No. 10 2F" rows="2" required></x-form.textarea>
                     </div>
                     <div class="flex gap-4 mb-4">
                         <div class="w-1/3">
@@ -91,7 +91,7 @@
                             <p class="font-bold">{{ $location->user->username }}</p>
                             <p>{{ $location->city }}, {{ $location->country }}</p>
                             <p>{{ $location->notes }}, {{ $location->postal_code }}</p>
-                            <form action="{{ route('locations.delete', ['id' => $location->id]) }}" method="POST">
+                            <form action="{{ route('locations.destroy', ['id' => $location->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
 

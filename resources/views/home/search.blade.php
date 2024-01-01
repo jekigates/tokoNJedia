@@ -54,7 +54,7 @@
                                         <p class="font-bold text-black">@str_limit($sMerchant->name)</p>
                                         <p class="text-xs text-gray">@str_limit($sMerchant->location->city)</p>
                                     </div>
-                                    <x-button variant="primary" outline class="ms-auto">View Shop</x-button>
+                                    <x-button href="{{ route('merchant.show', ['id' => $sMerchant->id]) }}" variant="primary" outline class="ms-auto">View Shop</x-button>
                                 </div>
 
                                 @if ($sMerchant->products->count() > 0)

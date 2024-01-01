@@ -30,7 +30,9 @@
                             <p class="font-bold font-lg text-black">{{ $cart->product->merchant->name }}</p>
                             <p class="text-gray mb-4">{{ $cart->product->merchant->location->city }}</p>
                             <div class="mb-4 flex gap-4 text-black">
-                                <img src="{{ $cart->product->images[0]->image }}" alt="" class="w-16 h-16 object-cover rounded-lg">
+                                <a href="{{ route('products.show', ['id' => $cart->product->id]) }}" class="w-16 h-16">
+                                    <img src="{{ $cart->product->images[0]->image }}" alt="" class="w-full h-full object-cover rounded-lg">
+                                </a>
                                 <div>
                                     <p class="text-md">{{ $cart->product->name }}</p>
                                     <p class="text-md font-bold">@money ($cart->variant->price)</p>

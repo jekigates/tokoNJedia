@@ -47,14 +47,6 @@ class Button extends Component
         if ($this->block) {
             $classes .= ' w-full';
         }
-        // switch ($this->variant) {
-        //     case 'primary':
-        //         $classes .= ' bg-primary text-white hover:text-primary hover:bg-white';
-        //         break;
-        //     case 'outline':
-        //         $classes .= ' bg-white text-primary hover:text-white hover:bg-primary';
-        //         break;
-        // }
 
         return $classes;
     }

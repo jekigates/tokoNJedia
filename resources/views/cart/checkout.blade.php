@@ -69,12 +69,12 @@
                         </div>
                         <div class="w-1/3">
                             <p class="font-semibold text-xs mb-2">Choose Duration</p>
-                            <select name="" id="" class="w-full py-2 px-4 border text-md rounded-md font-semibold border-primary bg-primary text-white outline-none input-shipment" merchant_latitude='{{ $cart->product->merchant->location->latitude }}' merchant_longitude='{{ $cart->product->merchant->location->longitude }}' product_id='{{ $cart->product->id }}' variant_id='{{ $cart->variant_id }}' price='{{ $cart->variant->price }}' onchange="selectShipment()">
+                            <x-form.select variant="primary" class="font-semibold input-shipment" merchant_latitude='{{ $cart->product->merchant->location->latitude }}' merchant_longitude='{{ $cart->product->merchant->location->longitude }}' product_id='{{ $cart->product->id }}' variant_id='{{ $cart->variant_id }}' price='{{ $cart->variant->price }}' onchange="selectShipment()">
                                 <option value="" class="bg-white text-black">--- Shipment ---</option>
                                 @foreach ($shipments as $shipment)
                                     <option shipment_id="{{ $shipment->id }}" shipment_base_price='{{ $shipment->base_price }}' shipment_variable_price='{{ $shipment->variable_price }}' class="bg-white text-black">{{ $shipment->name }}</option>
                                 @endforeach
-                            </select>
+                            </x-form.select>
                         </div>
                     </div>
                 @endforeach

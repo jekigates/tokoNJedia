@@ -99,11 +99,13 @@
                 <p>{{ $product->description }}</p>
             </div>
             <div class="flex items-center gap-4 text-sm mb-16">
-                <img
-                    src="{{ asset($product->merchant->getImage()) }}"
-                    alt=""
-                    class="rounded-full w-14 h-14"
-                />
+                <a class="w-14 h-14" href="{{ route('merchant.show', ['id' => $product->merchant->id]) }}">
+                    <img
+                        src="{{ asset($product->merchant->getImage()) }}"
+                        alt=""
+                        class="rounded-full w-full h-full"
+                    />
+                </a>
                 <div>
                     <p class="font-bold mb-2 text-black">{{ $product->merchant->name }}</p>
                     <button class="inline-flex py-1 px-4 text-primary border border-primary rounded-md hover:text-white hover:bg-primary">Follow</button>

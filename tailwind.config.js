@@ -19,6 +19,13 @@ module.exports = {
             },
         },
     },
-    safelist: ["bg-primary", "bg-gray", "hover:bg-gray", "hover:text-gray"],
+    safelist: [
+        "bg-primary",
+        "bg-gray",
+        "hover:bg-gray",
+        "hover:text-gray",
+        "hover:bg-red",
+        "hover:text-red",
+    ],
     plugins: [],
 };

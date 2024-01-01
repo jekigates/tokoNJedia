@@ -91,10 +91,10 @@
             @csrf
 
             <div class="text-center">
-                <img src="{{ asset(Auth::user()->getImage()) }}" alt="" class="inline-flex w-48 h-48 rounded-full mb-4 object-cover">
+                <img id="user_image" src="{{ asset(Auth::user()->getImage()) }}" alt="" class="inline-flex w-48 h-48 rounded-full mb-4 object-cover">
             </div>
-            <input type="file" name="image" id="image" class="hidden" accept=".jpg,.jpeg,.png" onchange="chooseImage()">
-            <x-button variant="gray" outline onclick="openInputImage()" block class="mb-4">Choose Image</x-button>
+            <input type="file" name="image" id="image" class="hidden" accept=".jpg,.jpeg,.png" onchange="submitImage(this)">
+            <x-button variant="gray" outline onclick="openInputImage('image')" block class="mb-4">Choose Image</x-button>
             <p class="text-sm text-black">File Size: Maximum 10.000.000 bytes (10 Megabytes). File extension allowed: .JPG, .JPEG, .PNG</p>
         </form>
         <div class="w-2/3">
@@ -147,22 +147,10 @@
 
 @push('scripts')
     <script>
-        function chooseImage() {
-            var image = document.querySelector('#image');
-
-            if (image.files.length > 0) {
-                if (image.files[0].size > 10000000) {
-                    alert('File must not be more than 10 Megabytes.');
-                } else {
-                    document.querySelector('#form-image').submit();
-                }
+        function submitImage(input) {
+            if (validateInputImage(input, 'user_image')) {
+                document.querySelector('#form-image').submit();
             }
-        }
-
-        function openInputImage()
-        {
-            var image = document.querySelector('#image');
-            image.click();
         }
 
         function changeGender(selectedButton)

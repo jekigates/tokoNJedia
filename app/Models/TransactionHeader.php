@@ -30,4 +30,14 @@ class TransactionHeader extends Model
     {
         return $this->electrics->where('created_at', $this->created_at)->first();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }

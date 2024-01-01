@@ -17,7 +17,7 @@
                                     </svg>
                                 Electric
                             </span>
-                            <p>{{ date('d-M-Y', strtotime($th->date)) }}</p>
+                            <p>{{ date('d M Y', strtotime($th->date)) }}</p>
                             <p>{{ date('H:i', strtotime($th->date)) }}</p>
                             <p class="text-primary bg-primary-light px-2">
                                 Completed
@@ -41,26 +41,58 @@
                                         </svg>
                                         Shopping
                                     </span>
-                                    <p>{{ date('d-M-Y', strtotime($th->date)) }}</p>
+                                    <p>{{ date('d M Y', strtotime($th->date)) }}</p>
                                     <p>{{ date('H:i', strtotime($th->date)) }}</p>
-                                    <p class="text-yellow-500 bg-yellow-100 px-2">
-                                        Pending
-                                    </p>
+                                    @switch($td->status)
+                                        @case('Pending')
+                                            <p class="text-yellow-500 bg-yellow-100 px-2">{{ $td->status }}</p>
+                                            @break
+                                        @case('Shipping')
+                                            <p class="text-blue-500 bg-blue-100 px-2">{{ $td->status }}</p>
+                                            @break
+                                        @case('Rejected')
+                                            <p class="text-red bg-red-light px-2">{{ $td->status }}</p>
+                                            @break
+                                        @case('Completed')
+                                            <p class="text-primary bg-primary-light px-2">{{ $td->status }}</p>
+                                            @break
+                                    @endswitch
                                     <p class="text-gray">{{ $th->id }}</p>
                                 </div>
                                 <p class="font-bold mb-4">{{ $td->product->merchant->name }}</p>
-                                <div class="mb-4 flex gap-4 text-black">
-                                    <img src="{{ $td->product->images[0]->image }}" alt="" class="w-16 h-16 object-cover rounded-lg">
+                                <div class="flex gap-4 text-black">
+                                    <a href="{{ route('products.show', ['id' => $td->product->id]) }}" class="w-16 h-16">
+                                        <img src="{{ asset($td->product->images[0]->image) }}" alt="" class="w-full h-full object-cover rounded-lg">
+                                    </a>
                                     <div>
                                         <p class="text-md flex items-center gap-4 text-md font-bold">{{ $td->product->name }} <span class="text-gray text-sm font-normal">{{ $td->variant->name}}</span></p>
                                         <p class="text-gray text-sm">{{ $td->quantity }} pcs x @money($td->price)</p>
                                     </div>
                                     <div class="ms-auto">
-                                        <div class="border-s border-gray-light px-8 mb-4">
-                                            <p class="text-gray">Total Price</p>
-                                            <p class="font-bold">@money($td->total_paid)</p>
+                                        <div class="flex justify-end">
+                                            <div class="border-s border-gray-light px-4 mb-4 inline-flex flex-col">
+                                                <p class="text-gray">Total Price</p>
+                                                <p class="font-bold">@money($td->total_paid)</p>
+                                            </div>
                                         </div>
-                                        <x-button variant="primary">Chat Seller</x-button>
+                                        <div>
+                                            @switch($td->status)
+                                                @case('Pending')
+                                                    <x-button variant="primary">Chat Seller</x-button>
+                                                    @break
+                                                @case('Shipping')
+                                                    <form action="{{ route('order.update', ['th_id' => $td->transaction_id, 'pr_id' => $td->product_id, 'va_id' => $td->variant_id]) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <x-button variant="primary" name="status" value="Completed" type="submit">Confirm Received</x-button>
+                                                    </form>
+                                                    @break
+                                                @case('Completed')
+                                                    <x-button variant="primary">Give Reviews and Buy Again</x-button>
+                                                    @break
+                                            @endswitch
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +101,7 @@
                 @endif
             @endforeach
         @else
-        <p class="text-lg font-bold">You got no history transaction yet.</p>
+            <p class="text-lg font-bold">You got no history transaction yet.</p>
         @endif
     </section>
 @endsection

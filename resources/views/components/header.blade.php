@@ -64,7 +64,7 @@
             @if (Auth::user()->merchant != null)
                 <a href="{{ route('merchant.index') }}" class="flex items-center gap-2 text-black hover:text-primary @yield('merchant')">
                     <img src="{{ asset(Auth::user()->merchant->getImage()) }}" alt="" class="w-8 h-8 rounded-full object-cover">
-                    <p>DK Store</p>
+                    <p>@str_limit(Auth::user()->merchant->name, 10)</p>
                 </a>
             @else
                 <x-button variant="primary" outline href="{{ route('merchant.register.index') }}">Be Merchant</x-button>

@@ -31,4 +31,14 @@ class TransactionDetail extends Model
     {
         return $this->belongsTo(ProductVariant::class, 'variant_id', 'id');
     }
+
+    public function header()
+    {
+        return $this->belongsTo(TransactionHeader::class, 'transaction_id', 'id');
+    }
+
+    public function shipment()
+    {
+        return $this->belongsTo(Shipment::class);
+    }
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\Merchant;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromoController;
@@ -52,11 +52,16 @@ Route::put('/general', [ProfileController::class, 'general_update'])->middleware
 
 Route::get('/locations', [ProfileController::class, 'location'])->middleware('auth')->name('locations.index');
 Route::post('/locations', [ProfileController::class, 'location_store'])->middleware('auth')->name('locations.store');
-Route::delete('/locations/{id}', [ProfileController::class, 'location_delete'])->middleware('auth')->name('locations.delete');
+Route::delete('/locations/{id}', [ProfileController::class, 'location_destroy'])->middleware('auth')->name('locations.destroy');
 
 Route::get('/history-transaction', [ProfileController::class, 'history'])->middleware('auth')->name('history-transaction.index');
 Route::get('/following-list', [ProfileController::class, 'following'])->middleware('auth')->name('following-list.index');
 
 Route::get('/merchant/register', [Merchant\RegisterController::class, 'index'])->middleware('auth')->name('merchant.register.index');
 Route::post('/merchant/register', [Merchant\RegisterController::class, 'store'])->middleware('auth')->name('merchant.register.store');
-Route::get('/merchant/home', [MerchantController::class, 'index'])->middleware('auth')->name('merchant.index');
+Route::get('/merchant/home', [Merchant\HomeController::class, 'index'])->middleware('auth')->name('merchant.index');
+Route::put('/th/{th_id}/pr/{pr_id}/va/{va_id}', [OrderController::class, 'update'])->middleware('auth')->name('order.update');
+Route::get('/merchant/profile', [Merchant\ProfileController::class, 'index'])->middleware('auth')->name('merchant.profile.index');
+Route::put('/merchant/profile', [Merchant\ProfileController::class, 'update'])->middleware('auth')->name('merchant.profile.update');
+Route::get('/merchant/transactions', [Merchant\TransactionController::class, 'index'])->middleware('auth')->name('merchant.transactions.index');
+Route::get('/merchant/{id}', [Merchant\HomeController::class, 'show'])->middleware('auth')->name('merchant.show');

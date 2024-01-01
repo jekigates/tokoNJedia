@@ -35,4 +35,30 @@ class Merchant extends Model
     {
         return ($this->image == null) ? 'img/logo/logo.png' : $this->image;
     }
+
+    public function orders()
+    {
+        return $this->hasManyThrough(TransactionDetail::class, Product::class);
+    }
+
+    public function pendings()
+    {
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)->where('status', 'Pending');
+    }
+
+    public function shippings()
+    {
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)->where('status', 'Shipping');
+    }
+
+    public function transactions()
+{
+    return $this->hasManyThrough(TransactionDetail::class, Product::class)
+        ->whereIn('status', ['Rejected', 'Completed']);
+}
+
+    public function getBannerImage()
+    {
+        return ($this->banner_image == null) ? 'img/logo/banner-merchant.jpeg' : $this->image;
+    }
 }
