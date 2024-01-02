@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Merchant;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -22,48 +23,97 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+// welcome generated
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// all role routes
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/login', [Auth\LoginController::class, 'index'])->name('login.index');
-Route::post('/login', [Auth\LoginController::class, 'authenticate'])->name('login.authenticate');
-Route::get('/register', [Auth\RegisterController::class, 'index'])->name('register.index');
-Route::post('/register', [Auth\RegisterController::class, 'authenticate'])->name('register.authenticate');
-Route::post('/logout', [HomeController::class, 'logout'])->middleware('auth')->name('logout');
-
-Route::get('/auth/redirect', [GoogleController::class, 'redirect']);
-Route::get('/auth/callback', [GoogleController::class, 'callback']);
-
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 Route::get('/promos/{id}', [PromoController::class, 'index'])->name('promos.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-
-Route::post('/cart', [CartController::class, 'store'])->middleware('auth')->name('cart.store');
-Route::get('/cart', [CartController::class, 'index'])->middleware('auth')->name('cart.index');
-Route::get('/checkout', [CartController::class, 'checkout_index'])->middleware('auth')->name('checkout.index');
-Route::post('/checkout', [CartController::class, 'checkout_store'])->middleware('auth')->name('checkout.store');
-Route::post('/bill', [CartController::class, 'bill_store'])->middleware('auth')->name('bill.store');
-
-Route::get('/search', [HomeController::class, 'search'])->name('home.search');
-
-Route::get('/general', [ProfileController::class, 'general'])->middleware('auth')->name('general.index');
-Route::put('/general', [ProfileController::class, 'general_update'])->middleware('auth')->name('general.update');
-
-Route::get('/locations', [ProfileController::class, 'location'])->middleware('auth')->name('locations.index');
-Route::post('/locations', [ProfileController::class, 'location_store'])->middleware('auth')->name('locations.store');
-Route::delete('/locations/{id}', [ProfileController::class, 'location_destroy'])->middleware('auth')->name('locations.destroy');
-
-Route::get('/history-transaction', [ProfileController::class, 'history'])->middleware('auth')->name('history-transaction.index');
-Route::get('/following-list', [ProfileController::class, 'following'])->middleware('auth')->name('following-list.index');
-
-Route::put('/th/{th_id}/pr/{pr_id}/va/{va_id}', [OrderController::class, 'update'])->middleware('auth')->name('order.update');
-Route::get('/merchant/register', [Merchant\RegisterController::class, 'index'])->middleware(['auth', 'not.user'])->name('merchant.register.index');
-Route::post('/merchant/register', [Merchant\RegisterController::class, 'store'])->middleware(['auth', 'not.user'])->name('merchant.register.store');
-
 Route::get('/merchants/{id}', [Merchant\HomeController::class, 'show'])->name('merchant.show');
 
-Route::get('/merchant/home', [Merchant\HomeController::class, 'index'])->middleware(['auth', 'not.merchant'])->name('merchant.index');
-Route::get('/merchant/profile', [Merchant\ProfileController::class, 'index'])->middleware(['auth', 'not.merchant'])->name('merchant.profile.index');
-Route::put('/merchant/profile', [Merchant\ProfileController::class, 'update'])->middleware(['auth', 'not.merchant'])->name('merchant.profile.update');
-Route::get('/merchant/transactions', [Merchant\TransactionController::class, 'index'])->middleware(['auth', 'not.merchant'])->name('merchant.transactions.index');
+// guest only routes
+Route::middleware('guest')->group(function () {
+    // login controllers
+    Route::prefix('login')->controller(Auth\LoginController::class)->name('login.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::post('', 'authenticate')->name('authenticate');
+    });
+
+    // register controllers
+    Route::prefix('register')->controller(Auth\RegisterController::class)->name('register.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::post('', 'authenticate')->name('authenticate');
+    });
+
+    // login register google controllers
+    Route::prefix('auth')->controller(GoogleController::class)->group(function () {
+        Route::get('redirect', 'redirect');
+        Route::get('callback', 'callback');
+    });
+});
+
+// authenticated user routes
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [HomeController::class, 'logout'])->name('logout');
+    Route::get('chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::post('chats/redirect/{merchant_id}', [ChatController::class, 'redirect'])->name('chats.redirect');
+
+    // cart controllers
+    Route::controller(CartController::class)->group(function () {
+        Route::get('cart', 'index')->name('cart.index');
+        Route::post('cart', 'store')->name('cart.store');
+        Route::get('checkout', 'checkout_index')->name('checkout.index');
+        Route::post('checkout', 'checkout_store')->name('checkout.store');
+        Route::post('bill', 'bill_store')->name('bill.store');
+    });
+
+    // profile controllers
+    Route::controller(ProfileController::class)->group(function () {
+        // prefix general
+        Route::prefix('general')->name('general.')->group(function () {
+            Route::get('', 'general_index')->name('index');
+            Route::put('', 'general_update')->name('update');
+        });
+
+        // prefix locations
+        Route::prefix('locations')->name('locations.')->group(function () {
+            Route::get('', 'location_index')->name('index');
+            Route::post('', 'location_store')->name('store');
+            Route::delete('{id}', 'location_destroy')->name('destroy');
+        });
+
+        Route::get('history-transaction', 'history_index')->name('history-transaction.index');
+        Route::get('following-list', 'following_index')->name('following-list.index');
+    });
+
+    // update transaction / order status by merchant / user
+    Route::put('th/{th_id}/pr/{pr_id}/va/{va_id}', [OrderController::class, 'update'])->name('order.update');
+
+    // merchant controllers
+    Route::prefix('merchant')->name('merchant.')->group(function () {
+        // only user able to register be merchant
+        Route::prefix('register')->controller(Merchant\RegisterController::class)->middleware('not.user')->name('register.')->group(function () {
+            Route::get('', 'index')->name('index');
+            Route::post('', 'store')->name('store');
+        });
+
+        // only merchant pages
+        Route::middleware('not.merchant')->group(function () {
+            Route::get('home', [Merchant\HomeController::class, 'index'])->name('index');
+            Route::get('chats', [Merchant\ChatController::class, 'index'])->name('chats.index');
+
+            // profile controllers
+            Route::prefix('profile')->controller(Merchant\ProfileController::class)->name('profile.')->group(function () {
+                Route::get('', 'index')->name('index');
+                Route::put('', 'update')->name('update');
+            });
+
+            Route::get('transactions', [Merchant\TransactionController::class, 'index'])->name('transactions.index');
+        });
+    });
+});

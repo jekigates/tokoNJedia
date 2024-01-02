@@ -59,6 +59,6 @@ class Merchant extends Model
 
     public function getBannerImage()
     {
-        return ($this->banner_image == null) ? 'img/logo/banner-merchant.jpeg' : $this->image;
+        return ($this->banner_image == null) ? 'img/logo/banner-merchant.jpeg' : $this->banner_image;
     }
 }

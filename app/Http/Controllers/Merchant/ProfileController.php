@@ -63,7 +63,7 @@ class ProfileController extends Controller
                 }
             }
 
-            $banner_image = Storage::disk('public')->put('merchant/banner_images', $request->file('image'));
+            $banner_image = Storage::disk('public')->put('merchant/banner-images', $request->file('banner_image'));
             $merchant->banner_image = 'storage/' . $banner_image;
         }
 

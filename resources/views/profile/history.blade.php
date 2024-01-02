@@ -78,7 +78,11 @@
                                         <div>
                                             @switch($td->status)
                                                 @case('Pending')
-                                                    <x-button variant="primary">Chat Seller</x-button>
+                                                    <form action="{{ route('chats.redirect', ['merchant_id' => $td->product->merchant->id]) }}" method="POST">
+                                                        @csrf
+
+                                                        <x-button type="submit" variant="primary">Chat Seller</x-button>
+                                                    </form>
                                                     @break
                                                 @case('Shipping')
                                                     <form action="{{ route('order.update', ['th_id' => $td->transaction_id, 'pr_id' => $td->product_id, 'va_id' => $td->variant_id]) }}" method="POST">

@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    public function general()
+    public function general_index()
     {
         $recommendations = Product::all()->random(5);
 
@@ -67,7 +67,7 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function location()
+    public function location_index()
     {
         $recommendations = Product::all()->random(5);
 
@@ -110,7 +110,7 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function history()
+    public function history_index()
     {
         $recommendations = Product::all()->random(5);
 
@@ -119,7 +119,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function following()
+    public function following_index()
     {
         $recommendations = Product::all()->random(5);
 

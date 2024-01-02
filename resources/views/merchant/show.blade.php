@@ -10,7 +10,7 @@
                     <img
                         src="{{ asset($merchant->getImage()) }}"
                         alt=""
-                        class="rounded-full w-24 h-24"
+                        class="rounded-full w-24 h-24 object-cover"
                     />
                     <div>
                         <p class="font-bold text-black text-lg">{{ $merchant->name }}</p>

@@ -103,7 +103,7 @@
                     <img
                         src="{{ asset($product->merchant->getImage()) }}"
                         alt=""
-                        class="rounded-full w-full h-full"
+                        class="rounded-full w-full h-full object-cover"
                     />
                 </a>
                 <div>

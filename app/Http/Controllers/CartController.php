@@ -30,11 +30,6 @@ class CartController extends Controller
         ]);
 
         $cart = Cart::where('user_id', $user_id)->where('variant_id', $variant_id)->where('product_id', $product_id)->first();
-        // $variant = ProductVariant::find($variant_id);
-
-        // if ($quantity > $variant->stock) {
-        //     return redirect()->back();
-        // }
 
         if ($cart == null) {
             Cart::create([
@@ -44,16 +39,8 @@ class CartController extends Controller
                 'quantity' => $quantity,
             ]);
         } else {
-            // $quantity += $cart->quantity;
-
-            // if ($quantity > $variant->stock) {
-            //     $quantity = $variant->stock;
-            // }
-
             Cart::where('user_id', $user_id)->where('variant_id', $variant_id)->where('product_id', $product_id)->update(['quantity' => $quantity]);
         }
-        // $variant->stock -= $quantity;
-        // $variant->save();
 
         return redirect()->route('cart.index');
     }

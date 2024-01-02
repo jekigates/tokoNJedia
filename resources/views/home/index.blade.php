@@ -98,13 +98,13 @@
         $secondLeft = 60 - date('s');
     @endphp
     @if (date('H') >= 22 && date('H') <= 23)
-        <section class="p-4 rounded-lg border mb-8">
-            <p class="text-sm font-bold">Flash Sale</p>
-            <div class="flex items-end gap-4 mb-12">
+        <section class="rounded-lg mb-16">
+            <p class="text-sm text-black font-bold">Flash Sale</p>
+            <div class="flex items-end gap-4 mb-12 text-black">
                 <p class="text-xl font-bold">Chasing Old Date Discount</p>
                 <p class="flex items-end gap-2 text-gray">Ends in <span class="text-white px-2 py-1 bg-red rounded-md" id=hour-left>{{ str_pad($hourLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red rounded-md" id="minute-left">{{ str_pad($minuteLeft, 2, '0', STR_PAD_LEFT) }}</span> : <span class="text-white px-2 py-1 bg-red rounded-md" id="second-left">{{ str_pad($secondLeft, 2, '0', STR_PAD_LEFT) }}</span></p>
             </div>
-            <div class="flex flex-wrap relative flex-row-reverse mb-6 -m-2">
+            <div class="flex flex-wrap relative justify-end -m-2">
                 <div class="bg-green-100 absolute left-2 px-12 top-1/2 -translate-y-1/2 rounded-lg w-80">
                     <img src="{{ asset('img/general/flash-sale.webp') }}" alt="" class="h-80 object-cover">
                 </div>
