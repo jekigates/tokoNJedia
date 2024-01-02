@@ -36,11 +36,11 @@
 
             <div class="mb-4">
                 <x-form.label for="email">Email</x-form.label>
-                <x-form.input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Example: email@tokonjedia.com" required />
+                <x-form.input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Example: email@tokonjedia.com" required maxlength="255"/>
             </div>
             <div class="mb-4">
                 <x-form.label for="password">Password</x-form.label>
-                <x-form.input type="password" name="password" id="password" placeholder="Input Password" required />
+                <x-form.input type="password" name="password" id="password" placeholder="Input Password" required maxlength="255"/>
             </div>
 
             @if ($errors->any())

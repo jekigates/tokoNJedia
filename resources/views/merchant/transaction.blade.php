@@ -5,7 +5,7 @@
 @section('transactions', 'text-primary')
 
 @section('content')
-    <section class="p-8">
+    <section>
         <p class="text-xl font-bold mb-4">Transaction History</p>
 
         @if (Auth::user()->merchant->transactions->count() > 0)

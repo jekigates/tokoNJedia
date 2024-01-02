@@ -5,7 +5,7 @@
 @section('home', 'text-primary')
 
 @section('content')
-    <section class="p-8">
+    <section>
         <div class="bg-black/5 rounded-lg p-8 mb-8">
             <p class="font-bold">Pending Orders</p>
             @if (Auth::user()->merchant->pendings()->count() > 0)

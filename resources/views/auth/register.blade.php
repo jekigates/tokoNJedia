@@ -30,15 +30,15 @@
 
                 <div class="mb-4">
                     <x-form.label for="email">Email</x-form.label>
-                    <x-form.input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Example: email@gmail.com" required />
+                    <x-form.input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Example: email@gmail.com" required maxlength="255"/>
                 </div>
                 <div class="mb-4">
                     <x-form.label for="password">Password</x-form.label>
-                    <x-form.input type="password" name="password" id="password" placeholder="Input Password" required />
+                    <x-form.input type="password" name="password" id="password" placeholder="Input Password" required maxlength="255"/>
                 </div>
                 <div class="mb-4">
-                    <x-form.label for="username">username</x-form.label>
-                    <x-form.input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Input Username" required />
+                    <x-form.label for="username">Username</x-form.label>
+                    <x-form.input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Input Username" required maxlength="255"/>
                 </div>
 
                 @if ($errors->any())

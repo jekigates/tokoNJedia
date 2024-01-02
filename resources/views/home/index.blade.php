@@ -65,10 +65,10 @@
 
             <div class="flex gap-2 items-start">
                 @foreach ($categories as $key => $category)
-                    <div class="flex-1 p-4 border border-gray-light text-center rounded-md">
+                    <a href="{{ route('categories.show', ['id' => $category->id]) }}" class="flex-1 p-4 border border-gray-light text-center rounded-md">
                         <img src="{{ $category->products[0]->images[0]->image }}" alt="" class="block w-full aspect-[4/3] rounded-md object-cover mb-2">
                         <p class="text-sm font-semibold text-black">@str_limit($category->products[0]->name, 10)</p>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>

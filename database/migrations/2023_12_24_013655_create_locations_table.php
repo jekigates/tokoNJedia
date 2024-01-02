@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('locationable_type');
             $table->timestamps();
         });
+
+        Schema::table('locations', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -35,6 +39,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('locations', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
         Schema::dropIfExists('locations');
     }
 };

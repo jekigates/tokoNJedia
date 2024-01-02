@@ -27,7 +27,7 @@ class ProfileController extends Controller
     {
         if ($request->username != null) {
             $validated = $request->validate([
-                'username' => ['required', 'unique:users'],
+                'username' => ['required', 'unique:users', 'max:255'],
             ]);
 
             User::find(Auth::user()->id)->update(['username' => $request->username]);

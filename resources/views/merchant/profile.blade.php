@@ -5,7 +5,7 @@
 @section('profile', 'text-primary')
 
 @section('content')
-    <form action="" method="POST" class="p-8" enctype="multipart/form-data">
+    <form action="" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -24,16 +24,16 @@
             <div class="flex-grow">
                 <div class="mb-4 w-1/3">
                     <x-form.label for="merchant_name">Merchant Name</x-form.label>
-                    <x-form.input type="text" name="name" id="merchant_name" placeholder="ABC Store" value="{{ Auth::user()->merchant->name }}" class="font-bold"/>
+                    <x-form.input type="text" name="name" id="merchant_name" placeholder="ABC Store" value="{{ Auth::user()->merchant->name }}" class="font-bold" maxlength="255"/>
                 </div>
                 <div class="flex gap-4">
                     <div class="w-1/3">
                         <x-form.label for="process_time">Process Time</x-form.label>
-                        <x-form.input type="text" name="process_time" id="process_time" placeholder="Process Time" value="{{ Auth::user()->merchant->process_time }}"/>
+                        <x-form.input type="text" name="process_time" id="process_time" placeholder="Process Time" value="{{ Auth::user()->merchant->process_time }}" maxlength="255"/>
                     </div>
                     <div class="w-1/3">
                         <x-form.label for="operational_time">Operational Time</x-form.label>
-                        <x-form.input type="text" name="operational_time" id="operational_time"  placeholder="Operational Time" value="{{ Auth::user()->merchant->operational_time }}"/>
+                        <x-form.input type="text" name="operational_time" id="operational_time"  placeholder="Operational Time" value="{{ Auth::user()->merchant->operational_time }}" maxlength="255"/>
                     </div>
                     <div class="w-1/3">
                         <x-form.label for="status">Status</x-form.label>
@@ -53,16 +53,16 @@
         <div class="flex gap-4 mb-4">
             <div class="w-3/4">
                 <x-form.label for="description">Description</x-form.label>
-                <x-form.input type="text" name="description" id="description" placeholder="Description" value="{{ Auth::user()->merchant->description }}"/>
+                <x-form.input type="text" name="description" id="description" placeholder="Description" value="{{ Auth::user()->merchant->description }}" maxlength="255"/>
             </div>
             <div class="w-1/4">
                 <x-form.label for="catch_phrase">Catchphrase</x-form.label>
-                <x-form.input type="text" name="catch_phrase" id="catch_phrase" placeholder="ex. Thrive for the better" value="{{ Auth::user()->merchant->catch_phrase }}"/>
+                <x-form.input type="text" name="catch_phrase" id="catch_phrase" placeholder="ex. Thrive for the better" value="{{ Auth::user()->merchant->catch_phrase }}" maxlength="255"/>
             </div>
         </div>
         <div class="mb-8">
             <x-form.label for="about_store">About Store</x-form.label>
-            <x-form.textarea name="full_description" id="about_store" placeholder="Tell your customer all about your store here">{{ Auth::user()->merchant->full_description }}</x-form.textarea>
+            <x-form.textarea name="full_description" id="about_store" placeholder="Tell your customer all about your store here" maxlength="255">{{ Auth::user()->merchant->full_description }}</x-form.textarea>
         </div>
         <div class="flex gap-4 justify-end">
             <x-button variant="red" class="flex items-center gap-2" type="reset" onclick="resetImages()">

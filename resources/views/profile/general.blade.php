@@ -23,7 +23,7 @@
 
                     <div class="mb-8">
                         <x-form.label for="username">Username</x-form.label>
-                        <x-form.input type="text" name="username" id="username" value="{{ Auth::user()->username }}" required/>
+                        <x-form.input type="text" name="username" id="username" value="{{ Auth::user()->username }}" required maxlength="255"/>
                         <x-form.text>Username could be seen by others</x-form.text>
                     </div>
                     <x-button type="submit" variant="primary" block>Save</x-button>

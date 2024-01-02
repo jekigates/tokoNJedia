@@ -41,7 +41,7 @@ class ChatController extends Controller
     public function store($room_id, Request $request)
     {
         $validated = $request->validate([
-            'message' => 'required',
+            'message' => ['required', 'max:255'],
         ]);
 
         $room = Room::findOrFail($room_id);

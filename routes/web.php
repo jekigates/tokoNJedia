@@ -30,8 +30,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // all role routes
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+
+Route::controller(HomeController::class)->name('home.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/search', 'search')->name('search');
+});
+
+Route::get('/categories/{id}', [HomeController::class, 'show'])->name('categories.show');
 Route::get('/promos/{id}', [PromoController::class, 'index'])->name('promos.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/merchants/{id}', [Merchant\HomeController::class, 'show'])->name('merchant.show');
@@ -131,6 +136,9 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::get('transactions', [Merchant\TransactionController::class, 'index'])->name('transactions.index');
+
+            Route::get('products', [Merchant\ProductController::class, 'index'])->name('products.index');
+            Route::get('products/create', [Merchant\ProductController::class, 'create'])->name('products.create');
         });
     });
 });

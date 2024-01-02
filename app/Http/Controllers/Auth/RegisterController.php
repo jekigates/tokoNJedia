@@ -18,9 +18,9 @@ class RegisterController extends Controller
     public function authenticate(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required', 'unique:users', 'ends_with:.com'],
-            'password' =>  ['required', 'max:20', Password::min(5)->mixedCase()->numbers()],
-            'username' => ['required', 'unique:users'],
+            'email' => ['required', 'unique:users', 'ends_with:.com', 'max:255'],
+            'password' =>  ['required', 'max:20', Password::min(5)->mixedCase()->numbers(), 'max:255'],
+            'username' => ['required', 'unique:users', 'max:255'],
         ]);
 
         if ($validator->fails()) {

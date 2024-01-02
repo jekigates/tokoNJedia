@@ -30,7 +30,7 @@
                 @switch($chat_type)
                     @case('user')
                         @if ($message->messageable_id == $sender->id && $message->messageable_type == $chat_type)
-                            <div class="flex items-end gap-4 ms-auto">
+                            <div class="flex items-end gap-4 max-w-96 ms-auto">
                                 <div class="text-end">
                                     <p class="text-black mb-1 text-sm">{{ $sender->username }}</p>
                                     <p class="bg-gray-dark text-white py-2 px-4 rounded-lg rounded-br-none mb-1 inline-flex">{{ $message->message}}</p>
@@ -39,7 +39,7 @@
                                 <img src="{{ asset($sender->getImage()) }}" alt="" class="w-8 h-8 rounded-full">
                             </div>
                         @else
-                            <div class="flex items-end gap-4">
+                            <div class="flex items-end gap-4 max-w-96">
                                 <img src="{{ asset($room->roomable_merchant()->merchant->getImage()) }}" alt="" class="w-8 h-8 rounded-full">
                                 <div>
                                     <p class="text-black mb-1 text-sm">{{ $room->roomable_merchant()->merchant->name }}</p>
@@ -51,7 +51,7 @@
                         @break
                     @case('merchant')
                         @if ($message->messageable_id == $sender->id && $message->messageable_type == $chat_type)
-                            <div class="flex items-end gap-4 ms-auto">
+                            <div class="flex items-end gap-4 max-w-96 ms-auto">
                                 <div class="text-end">
                                     <p class="text-black mb-1 text-sm">{{ $sender->name }}</p>
                                     <p class="bg-gray-dark text-white py-2 px-4 rounded-lg rounded-br-none mb-1 inline-flex">{{ $message->message }}</p>
@@ -60,7 +60,7 @@
                                 <img src="{{ asset($sender->getImage()) }}" alt="" class="w-8 h-8 rounded-full">
                             </div>
                         @else
-                            <div class="flex items-end gap-4">
+                            <div class="flex items-end gap-4 max-w-96">
                                 <img src="{{ asset($room->roomable_user()->user->getImage()) }}" alt="" class="w-8 h-8 rounded-full">
                                 <div>
                                     <p class="text-black mb-1 text-sm">{{ $room->roomable_user()->user->username }}</p>
@@ -81,7 +81,7 @@
             @case('user')
                 <form action="{{ route('chats.store', ['room_id' => $room->id]) }}" method="POST" class="flex gap-4 w-full">
                     @csrf
-                    <x-form.input type="text" name="message" placeholder="Send something as {{ $sender->username }}" required/>
+                    <x-form.input type="text" name="message" placeholder="Send something as {{ $sender->username }}" required maxlength="255"/>
                     <x-button type="submit" variant="primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
@@ -92,7 +92,7 @@
             @case('merchant')
                 <form action="{{ route('merchant.chats.store', ['room_id' => $room->id]) }}" method="POST" class="flex gap-4 w-full">
                     @csrf
-                    <x-form.input type="text" name="message" placeholder="Send something as {{ $sender->name }}" required/>
+                    <x-form.input type="text" name="message" placeholder="Send something as {{ $sender->name }}" required maxlength="255"/>
                     <x-button type="submit" variant="primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />

@@ -23,11 +23,11 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'=> ['required'],
-            'city' => ['required'],
-            'country' => ['required'],
-            'address' => ['required'],
-            'notes' => ['required'],
+            'name'=> ['required', 'max:255'],
+            'city' => ['required', 'max:255'],
+            'country' => ['required', 'max:255'],
+            'address' => ['required', 'max:255'],
+            'notes' => ['required', 'max:255'],
             'postal_code' => ['required', 'numeric', 'digits:5'],
             'latitude' => ['required'],
             'longitude' => ['required'],

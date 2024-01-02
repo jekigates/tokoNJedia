@@ -25,7 +25,12 @@ class ProfileController extends Controller
         $merchant = Merchant::findOrFail(Auth::user()->merchant->id);
 
         $request->validate([
-            'name' => ['required'], // 1 GB = 1024 MB, 1 MB = 1024 KB
+            'name' => ['required', 'max:255'], // 1 GB = 1024 MB, 1 MB = 1024 KB
+            'process_time' => ['max:255'],
+            'operational_time' => ['max:255'],
+            'description' => ['max:255'],
+            'catch_phrase' => ['max:255'],
+            'full_description' => ['max:255'],
         ]);
 
         $merchant->name = $request->name;

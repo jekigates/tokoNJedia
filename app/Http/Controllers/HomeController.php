@@ -67,4 +67,15 @@ class HomeController extends Controller
             'sMerchants' => $sMerchants,
         ]);
     }
+
+    public function show($id)
+    {
+        $recommendations = Product::all()->random(5);
+        $category = ProductCategory::find($id);
+
+        return view('home.show', [
+            'recommendations' => $recommendations,
+            'category' => $category,
+        ]);
+    }
 }

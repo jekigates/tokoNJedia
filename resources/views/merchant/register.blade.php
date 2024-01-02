@@ -26,7 +26,7 @@
                         <button class="border border-primary rounded-full text-primary h-8 w-8 flex items-center justify-center">1</button>
                         <div class="flex-grow">
                             <p class="text-xl font-semibold text-black mb-4">Enter Your Phone Number</p>
-                            <x-form.label for="phone-number">Phone Number</x-form.label>
+                            <x-form.label for="phone-number">Phone Number <span class="text-red font-bold">*</span></x-form.label>
                             <x-form.input type="text" name="phone-number" id="phone-number" placeholder="08XXXXXXXXXX" minlength="12" maxlength="12" pattern="[0-9]{12}" required/>
                             <x-form.text class="mb-4">Make sure your phone number is active to speed up the registration process</x-form.text>
                             <x-button variant="gray" type="submit">Next</x-button>
@@ -38,7 +38,7 @@
                         <button class="border border-gray rounded-full text-gray h-8 w-8 flex items-center justify-center">2</button>
                         <div class="flex-grow">
                             <p class="text-xl font-semibold text-black mb-4">Enter Your Merchant Name</p>
-                            <x-form.label for="merchant-name">Merchant Name</x-form.label>
+                            <x-form.label for="merchant-name">Merchant Name <span class="text-red font-bold">*</span></x-form.label>
                             <x-form.input type="text" name="merchant-name" id="merchant-name" placeholder="ABC Store" required/>
                             <x-form.text class="mb-4">Merchant name will be displayed on your products</x-form.text>
                             <div class="flex gap-4">
@@ -61,23 +61,23 @@
                             <input type="hidden" name="name" id="name">
                             <input type="hidden" name="phone" id="phone">
                             <div class="mb-4">
-                                <x-form.label for="city">City</x-form.label>
+                                <x-form.label for="city">City <span class="text-red font-bold">*</span></x-form.label>
                                 <x-form.input type="text" name="city" id="city" placeholder="ex. Jakarta" required/>
                             </div>
                             <div class="mb-4">
-                                <x-form.label for="country">Country</x-form.label>
+                                <x-form.label for="country">Country <span class="text-red font-bold">*</span></x-form.label>
                                 <x-form.input type="text" name="country" id="country" placeholder="ex. Indonesia" required/>
                             </div>
                             <div class="mb-4">
-                                <x-form.label for="address">Address</x-form.label>
+                                <x-form.label for="address">Address <span class="text-red font-bold">*</span></x-form.label>
                                 <x-form.input type="text" name="address" id="address" placeholder="ex. Mister Potato Street No. 1" required/>
                             </div>
                             <div class="mb-4">
-                                <x-form.label for="postal_code">Postal Code</x-form.label>
+                                <x-form.label for="postal_code">Postal Code <span class="text-red font-bold">*</span></x-form.label>
                                 <x-form.input type="text" name="postal_code" id="postal_code" placeholder="ex. 14045" required/>
                             </div>
                             <div class="mb-4">
-                                <x-form.label for="notes">Notes</x-form.label>
+                                <x-form.label for="notes">Notes <span class="text-red font-bold">*</span></x-form.label>
                                 <x-form.input type="text" name="notes" id="notes" placeholder="ex. White building, Yellow Roof" required/>
                             </div>
                             <div class="flex gap-4">
