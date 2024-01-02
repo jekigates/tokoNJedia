@@ -60,10 +60,14 @@ Route::middleware('guest')->group(function () {
 // authenticated user routes
 Route::middleware('auth')->group(function () {
     Route::post('logout', [HomeController::class, 'logout'])->name('logout');
-    Route::get('chats', [ChatController::class, 'index'])->name('chats.index');
-    Route::post('chats/redirect/{merchant_id}', [ChatController::class, 'redirect'])->name('chats.redirect');
-    Route::get('chats/{room_id}', [ChatController::class, 'show'])->name('chats.show');
-    Route::post('chats/{room_id}', [ChatController::class, 'store'])->name('chats.store');
+
+    // prefix chats controllers
+    Route::prefix('chats')->controller(ChatController::class)->name('chats.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::post('redirect/{merchant_id}', 'redirect')->name('redirect');
+        Route::get('{room_id}', 'show')->name('show');
+        Route::post('{room_id}', 'store')->name('store');
+    });
 
     // cart controllers
     Route::controller(CartController::class)->group(function () {
@@ -107,9 +111,13 @@ Route::middleware('auth')->group(function () {
         // only merchant pages
         Route::middleware('not.merchant')->group(function () {
             Route::get('home', [Merchant\HomeController::class, 'index'])->name('index');
-            Route::get('chats', [Merchant\ChatController::class, 'index'])->name('chats.index');
-            Route::get('chats/{room_id}', [Merchant\ChatController::class, 'show'])->name('chats.show');
-            Route::post('chats/{room_id}', [Merchant\ChatController::class, 'store'])->name('chats.store');
+
+            // prefix chats controllers
+            Route::prefix('chats')->controller(Merchant\ChatController::class)->name('chats.')->group(function () {
+                Route::get('', 'index')->name('index');
+                Route::get('{room_id}', 'show')->name('show');
+                Route::post('{room_id}', 'store')->name('store');
+            });
 
             // profile controllers
             Route::prefix('profile')->controller(Merchant\ProfileController::class)->name('profile.')->group(function () {

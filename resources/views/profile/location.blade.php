@@ -95,7 +95,9 @@
                                 @csrf
                                 @method('DELETE')
 
-                                <button type="submit" class="text-sm text-primary font-bold">Delete</button>
+                                @if ($location->transaction_headers()->count() == 0)
+                                    <button type="submit" class="text-sm text-primary font-bold">Delete</button>
+                                @endif
                             </form>
                         </div>
                 @endforeach

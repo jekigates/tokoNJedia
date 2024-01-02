@@ -31,4 +31,9 @@ class Location extends Model
     {
         return $this->belongsTo(Merchant::class, 'id', 'locationable_id');
     }
+
+    public function transaction_headers()
+    {
+        return $this->hasMany(TransactionHeader::class);
+    }
 }

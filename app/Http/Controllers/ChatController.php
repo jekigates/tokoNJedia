@@ -15,9 +15,13 @@ class ChatController extends Controller
     public function index()
     {
         $recommendations = Product::all()->random(5);
+        $sender = Auth::user();
+        $chat_type = 'user';
 
         return view('chats.index', [
             'recommendations' => $recommendations,
+            'sender' => $sender,
+            'chat_type' => $chat_type,
         ]);
     }
 
@@ -51,10 +55,14 @@ class ChatController extends Controller
     {
         $room = Room::findOrFail($room_id);
         $recommendations = Product::all()->random(5);
+        $sender = Auth::user();
+        $chat_type = 'user';
 
         return view('chats.show', [
             'recommendations' => $recommendations,
             'room' => $room,
+            'sender' => $sender,
+            'chat_type' => $chat_type,
         ]);
     }
 
