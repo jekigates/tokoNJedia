@@ -94,7 +94,12 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::get('history-transaction', 'history_index')->name('history-transaction.index');
-        Route::get('following-list', 'following_index')->name('following-list.index');
+
+        Route::prefix('following-list')->name('following-list.')->group(function () {
+            Route::get('', 'following_index')->name('index');
+            Route::post('', 'following_store')->name('store');
+            Route::delete('', 'following_destroy')->name('destroy');
+        });
     });
 
     // update transaction / order status by merchant / user

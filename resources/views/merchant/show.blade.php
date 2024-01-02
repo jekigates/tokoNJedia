@@ -16,7 +16,26 @@
                         <p class="font-bold text-black text-lg">{{ $merchant->name }}</p>
                         <p class="text-gray mb-2">Online</p>
                         <div class="flex gap-2">
-                            <x-button variant="primary">Follow</x-button>
+                            @if (Auth::check())
+                                @if (Auth::user()->following($merchant->id) == null)
+                                    <form action="{{ route('following-list.store') }}" method="POST">
+                                        @csrf
+
+                                        <input type="hidden" name="merchant_id" value="{{ $merchant->id }}">
+                                        <x-button variant="primary" type="submit">Follow</x-button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('following-list.destroy') }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <input type="hidden" name="merchant_id" value="{{ $merchant->id }}">
+                                        <x-button variant="primary" type="submit">Unfollow</x-button>
+                                    </form>
+                                @endif
+                            @else
+                                <x-button variant="primary" href="{{ route('login.index') }}">Follow</x-button>
+                            @endif
                             <x-button variant="primary" outline>Chat Seller</x-button>
                         </div>
                     </div>

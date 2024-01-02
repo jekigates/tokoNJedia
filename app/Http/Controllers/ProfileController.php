@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Following;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\User;
@@ -126,5 +127,32 @@ class ProfileController extends Controller
         return view('profile.following', [
             'recommendations' => $recommendations,
         ]);
+    }
+
+    public function following_store(Request $request)
+    {
+        $validated = $request->validate([
+            'merchant_id' => ['required'],
+        ]);
+
+        $user = User::findOrFail(Auth::user()->id);
+        $user->followings()->create([
+            'merchant_id' => $request->merchant_id,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function following_destroy(Request $request)
+    {
+        $validated = $request->validate([
+            'merchant_id' => ['required'],
+        ]);
+
+        $user = User::findOrFail(Auth::user()->id);
+
+        Following::where('merchant_id', $request->merchant_id)->where('user_id', $user->id)->delete();
+
+        return redirect()->back();
     }
 }

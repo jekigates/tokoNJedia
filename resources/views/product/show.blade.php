@@ -108,7 +108,26 @@
                 </a>
                 <div>
                     <p class="font-bold mb-2 text-black">{{ $product->merchant->name }}</p>
-                    <button class="inline-flex py-1 px-4 text-primary border border-primary rounded-md hover:text-white hover:bg-primary">Follow</button>
+                    @if (Auth::check())
+                        @if (Auth::user()->following($product->merchant->id) == null)
+                            <form action="{{ route('following-list.store') }}" method="POST">
+                                @csrf
+
+                                <input type="hidden" name="merchant_id" value="{{ $product->merchant->id }}">
+                                <button type="submit" class="inline-flex py-1 px-4 text-primary border border-primary rounded-md hover:text-white hover:bg-primary">Follow</button>
+                            </form>
+                        @else
+                            <form action="{{ route('following-list.destroy') }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <input type="hidden" name="merchant_id" value="{{ $product->merchant->id }}">
+                                <button type="submit" class="inline-flex py-1 px-4 text-primary border border-primary rounded-md hover:text-white hover:bg-primary">Unfollow</button>
+                            </form>
+                        @endif
+                    @else
+                        <a href="{{ route('login.index') }}" class="inline-flex py-1 px-4 text-primary border border-primary rounded-md hover:text-white hover:bg-primary">Follow</a>
+                    @endif
                 </div>
             </div>
 

@@ -68,4 +68,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Room::class, 'roomables', 'roomable_id', 'room_id')
         ->wherePivot('roomable_type', 'user');
     }
+
+    public function followings()
+    {
+        return $this->hasMany(Following::class);
+    }
+
+    public function following($merchant_id)
+    {
+        return $this->followings->where('merchant_id', $merchant_id)->first();
+    }
 }
