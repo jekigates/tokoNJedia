@@ -31,7 +31,7 @@
 
         <div class="flex-grow">
             <form action="{{ route('home.search') }}" method="GET">
-                <input type="search" name="keyword" value="{{ Request::get('keyword') }}" placeholder="Search" class="w-full rounded-md px-4 py-2 border border-gray-light outline-none focus:border-primary">
+                <x-form.input type="search" name="keyword" value="{{ Request::get('keyword') }}" placeholder="Search" required/>
             </form>
 
             @isset($recommendations)

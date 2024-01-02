@@ -52,13 +52,19 @@ class Merchant extends Model
     }
 
     public function transactions()
-{
-    return $this->hasManyThrough(TransactionDetail::class, Product::class)
-        ->whereIn('status', ['Rejected', 'Completed']);
-}
+    {
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)
+            ->whereIn('status', ['Rejected', 'Completed']);
+    }
 
     public function getBannerImage()
     {
         return ($this->banner_image == null) ? 'img/logo/banner-merchant.jpeg' : $this->banner_image;
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'roomables', 'roomable_id', 'room_id')
+        ->wherePivot('roomable_type', 'merchant');
     }
 }

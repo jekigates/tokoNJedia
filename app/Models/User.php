@@ -62,4 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(TransactionHeader::class);
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'roomables', 'roomable_id', 'room_id')
+        ->wherePivot('roomable_type', 'user');
+    }
 }

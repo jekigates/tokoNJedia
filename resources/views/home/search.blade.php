@@ -31,7 +31,7 @@
             </section>
         @else
             <div class="tab-section tab-section-active" id="section-product">
-                <div class="rounded-xl border border-gray py-8 px-16 gap-8 flex">
+                <div class="rounded-xl border border-gray-light py-8 px-16 gap-8 flex">
                     <img src="{{ asset('img/checkout/not-found.png') }}" alt="" class="h-32 object-cover">
                     <div>
                         <p class="font-bold text-xl mb-2">Oops, we think it hides somewhere</p>

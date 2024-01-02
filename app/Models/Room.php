@@ -19,4 +19,14 @@ class Room extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    public function roomable_merchant()
+    {
+        return $this->roomables()->where('roomable_type', 'merchant')->first();
+    }
+
+    public function roomable_user()
+    {
+        return $this->roomables()->where('roomable_type', 'user')->first();
+    }
 }
