@@ -29,7 +29,7 @@ class TransactionDetail extends Model
 
     public function variant()
     {
-        return $this->belongsTo(ProductVariant::class, 'variant_id', 'id');
+        return $this->belongsTo(ProductVariant::class, 'variant_id', 'id')->withTrashed();
     }
 
     public function header()

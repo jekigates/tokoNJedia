@@ -22,6 +22,10 @@ return new class extends Migration
             $table->integer('price');
             $table->timestamps();
         });
+
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -31,6 +35,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
         Schema::dropIfExists('product_variants');
     }
 };

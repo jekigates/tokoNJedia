@@ -6,7 +6,7 @@
         <x-form.label for="variant_name_{{ $variant }}">Product variant name min. 3 character</x-form.label>
     </div>
     <div class="flex-grow">
-        <x-form.input type="text" id="variant_name_{{ $variant }}" name="variant_names[]" placeholder="Example: Nike Man Shoes Variant 1 (Product Type/Category/Brand/Other)" minlength="3" required/>
+        <x-form.input type="text" id="variant_name_{{ $variant }}" name="variant_names[]" placeholder="Example: Nike Man Shoes Variant {{ $variant }} (Product Type/Category/Brand/Other)" minlength="3" maxlength="255" required/>
     </div>
 </div>
 <div class="flex items-center gap-16 mb-4">

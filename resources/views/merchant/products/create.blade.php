@@ -20,7 +20,7 @@
                     <x-form.label for="product_name">Product name min. 3 character</x-form.label>
                 </div>
                 <div class="flex-grow">
-                    <x-form.input type="text" name="product_name" id="product_name" placeholder="Example: Nike Man Shoes (Product Type/Category/Brand/Other)" required minlength="3"/>
+                    <x-form.input type="text" name="product_name" id="product_name" placeholder="Example: Nike Man Shoes (Product Type/Category/Brand/Other)" required minlength="3" maxlength="255"/>
                 </div>
             </div>
             <div class="flex items-center gap-16">
@@ -86,7 +86,7 @@
                     <x-form.label for="product_description">Make sure the product description contains a detailed explanation regarding your product so that buyers can easily understand and find your product</x-form.label>
                 </div>
                 <div class="flex-grow">
-                    <x-form.textarea rows="6" name="product_description" required></x-form.textarea>
+                    <x-form.textarea rows="6" name="product_description" required maxlength="255"></x-form.textarea>
                 </div>
             </div>
         </div>
