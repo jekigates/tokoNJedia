@@ -45,7 +45,7 @@
                         class="text-yellow-500 fill-yellow-500"
                     />
                 </svg>
-                0 (0 review)
+                {{ $product->reviewsAverage() }} ({{ $product->reviews()->count() }} review)
             </p>
             <p class="font-bold text-3xl mb-4 text-black" id="product-new-price">
                 @money($lp->price - ($lp->price * $discount / 100))
@@ -132,14 +132,30 @@
             </div>
 
             <div>
-                <p class="mb-4 font-bold text-black">REVIEWS</p>
-                <div class="rounded-lg border border-gray-light flex gap-4 p-8 items-center">
-                    <img src="{{ asset('img/general/no-review.png') }}" alt="" class="w-20">
-                    <div>
-                        <p class="font-bold text-3xl text-black">There is no review yet.</p>
-                        <p class="text-gray">Be the first one to buy and review the product.</p>
+                <p class="font-bold text-black mb-8">REVIEWS</p>
+
+                @if ($product->reviews->count() == 0)
+                    <div class="rounded-lg border border-gray-light flex gap-4 p-8 items-center">
+                        <img src="{{ asset('img/general/no-review.png') }}" alt="" class="w-20">
+                        <div>
+                            <p class="font-bold text-3xl text-black">There is no review yet.</p>
+                            <p class="text-gray">Be the first one to buy and review the product.</p>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="max-h-96 overflow-y-auto border border-gray-light rounded-lg flex flex-col gap-8 p-4">
+                        @foreach ($product->reviews as $review)
+                            <div class="flex gap-4">
+                                <img src="{{ asset($review->user->getImage()) }}" alt="" class="w-16 h-16">
+                                <div class="flex-grow">
+                                    <p class="font-semibold">{{ $review->user->username }}</p>
+                                    <p class="text-xs text-gray">{{ $review->created_at }}</p>
+                                    <p>{{ $review->message }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
         <div class="w-1/4">

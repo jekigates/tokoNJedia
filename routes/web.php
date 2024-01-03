@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -109,6 +110,9 @@ Route::middleware('auth')->group(function () {
 
     // update transaction / order status by merchant / user
     Route::put('th/{th_id}/pr/{pr_id}/va/{va_id}', [OrderController::class, 'update'])->name('order.update');
+    Route::get('th/{th_id}/pr/{pr_id}/va/{va_id}/reviews', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('th/{th_id}/pr/{pr_id}/va/{va_id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('reviews/{review_id}', [ReviewController::class, 'show'])->name('reviews.show');
 
     // merchant controllers
     Route::prefix('merchant')->name('merchant.')->group(function () {
@@ -137,14 +141,24 @@ Route::middleware('auth')->group(function () {
 
             Route::get('transactions', [Merchant\TransactionController::class, 'index'])->name('transactions.index');
 
-            Route::get('products', [Merchant\ProductController::class, 'index'])->name('products.index');
-            Route::get('products/create', [Merchant\ProductController::class, 'create'])->name('products.create');
-            Route::post('products/store', [Merchant\ProductController::class, 'store'])->name('products.store');
-            Route::put('products/{id}', [Merchant\ProductController::class, 'update'])->name('products.update');
-            Route::delete('products/{id}', [Merchant\ProductController::class, 'destroy'])->name('products.destroy');
-            Route::post('products/{product_id}/variants', [Merchant\VariantController::class, 'store'])->name('variants.store');
-            Route::put('products/{product_id}/variants/{variant_id}', [Merchant\VariantController::class, 'update'])->name('variants.update');
-            Route::delete('products/{product_id}/variants/{variant_id}', [Merchant\VariantController::class, 'destroy'])->name('variants.destroy');
+            // prefix products
+            Route::prefix('products')->group(function () {
+                // product controllers
+                Route::controller(Merchant\ProductController::class)->name('products.')->group(function () {
+                    Route::get('', 'index')->name('index');
+                    Route::get('create', 'create')->name('create');
+                    Route::post('store', 'store')->name('store');
+                    Route::put('{id}', 'update')->name('update');
+                    Route::delete('{id}', 'destroy')->name('destroy');
+                });
+
+                // variant controllers
+                Route::controller(Merchant\VariantController::class)->name('variants.')->group(function () {
+                    Route::post('{product_id}/variants', 'store')->name('store');
+                    Route::put('{product_id}/variants/{variant_id}', 'update')->name('update');
+                    Route::delete('{product_id}/variants/{variant_id}', 'destroy')->name('destroy');
+                });
+            });
         });
     });
 });

@@ -66,3 +66,21 @@ function validateBoxImage(input, imgId) {
     $("#" + imgId).html(img);
     return true;
 }
+
+function validateBoxVideo(input, videoId) {
+    if (input.files.length === 0) {
+        return false;
+    }
+
+    if (input.files[0].size > 10000000) {
+        alert("File must not be more than 10 Megabytes.");
+        return false;
+    }
+
+    let video = document.createElement("video");
+    video.className = "w-full h-full object-cover";
+    video.controls = true;
+    video.src = URL.createObjectURL(input.files[0]);
+    $("#" + videoId).html(video);
+    return true;
+}

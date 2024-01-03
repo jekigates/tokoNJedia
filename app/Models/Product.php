@@ -80,4 +80,16 @@ class Product extends Model
     {
         return $this->transaction_details->count();
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function reviewsAverage()
+    {
+        if ($this->reviews()->count() == 0) return 0;
+        $avg = $this->reviews()->sum('review') / $this->reviews()->count();
+        return number_format($avg, 1);
+    }
 }

@@ -40,4 +40,14 @@ class TransactionHeader extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'transaction_id', 'id');
+    }
+
+    public function review($product_id, $variant_id)
+    {
+        return $this->reviews->where('product_id', $product_id)->where('variant_bought', $variant_id)->first();
+    }
 }

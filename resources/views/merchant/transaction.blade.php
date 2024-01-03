@@ -56,7 +56,9 @@
                                 <div>
                                     @switch($td->status)
                                         @case('Completed')
-                                            <x-button variant="primary" outline class="mt-4">See Reviews</x-button>
+                                            @if ($td->header->review($td->product_id, $td->variant_id) != null)
+                                                <x-button variant="primary" class="mt-4" outline href="{{ route('reviews.show', ['review_id' => $td->header->review($td->product_id, $td->variant_id)->id]) }}">See Reviews</x-button>
+                                            @endif
                                             @break
                                     @endswitch
                                 </div>

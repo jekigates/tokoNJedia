@@ -93,7 +93,11 @@
                                                     </form>
                                                     @break
                                                 @case('Completed')
-                                                    <x-button variant="primary">Give Reviews and Buy Again</x-button>
+                                                    @if ($th->review($td->product_id, $td->variant_id) == null)
+                                                        <x-button variant="primary" href="{{ route('reviews.create', ['th_id' => $td->transaction_id, 'pr_id' => $td->product_id, 'va_id' => $td->variant_id]) }}">Give Reviews and Buy Again</x-button>
+                                                    @else
+                                                        <x-button variant="primary" outline href="{{ route('reviews.show', ['review_id' => $th->review($td->product_id, $td->variant_id)->id]) }}">See Reviews</x-button>
+                                                    @endif
                                                     @break
                                             @endswitch
                                         </div>
