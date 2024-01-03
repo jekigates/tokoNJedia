@@ -24,6 +24,10 @@ return new class extends Migration
             $table->foreign('product_category_id')->references('id')->on('product_categories');
             $table->timestamps();
         });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -33,6 +37,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
         Schema::dropIfExists('products');
     }
 };

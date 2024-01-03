@@ -200,8 +200,12 @@
                     </div>
                 </div>
 
-                <x-button class="mb-2" type="submit" variant="primary" block>+ Add To Cart</x-button>
-                <x-button variant="primary" outline block>Buy Now</x-button>
+                @if ($product->trashed())
+                    <x-button variant="gray" block>Product Not Available Anymore</x-button>
+                @else
+                    <x-button class="mb-2" type="submit" variant="primary" block>+ Add To Cart</x-button>
+                    <x-button variant="primary" outline block>Buy Now</x-button>
+                @endif
             </form>
         </div>
     </section>

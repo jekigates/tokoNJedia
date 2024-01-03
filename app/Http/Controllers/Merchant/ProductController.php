@@ -16,9 +16,11 @@ class ProductController extends Controller
     public function index()
     {
         $recommendations = Product::all()->random(5);
+        $categories = ProductCategory::all();
 
         return view('merchant.products.index', [
             'recommendations' => $recommendations,
+            'categories' => $categories,
         ]);
     }
 
@@ -82,5 +84,44 @@ class ProductController extends Controller
         }
 
         return redirect()->route('merchant.products.index');
+    }
+
+    public function update($id, Request $request)
+    {
+        $validated = $request->validate([
+            'edit_product_name' => ['required', 'max:255'],
+            'edit_product_category_id' => ['required'],
+            'edit_product_description' => ['required', 'max:255'],
+            'edit_product_images' => ['required', 'array'],
+            'edit_product_images.*' => ['required', 'file', 'max:' . (10 * 1024 * 1024), 'mimes:jpg,jpeg,png'],
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        foreach ($product->images as $pi) {
+            $path = str_replace('storage/', '', $pi->image);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+        $product->images()->delete();
+
+        foreach ($request->edit_product_images as $image) {
+            $product_image = Storage::disk('public')->put('product-images', $image);
+            $product->images()->create([
+                'image' => 'storage/' . $product_image,
+            ]);
+        }
+
+        return redirect()->back();
+    }
+
+    public function destroy($id, Request $request)
+    {
+        $product = Product::findOrFail($id);
+
+        $product->delete();
+
+        return redirect()->back();
     }
 }

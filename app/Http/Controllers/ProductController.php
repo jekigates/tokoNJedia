@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::withTrashed()->findOrFail($id);
         $recommendations = Product::all()->random(5);
 
         return view('product.show', [
