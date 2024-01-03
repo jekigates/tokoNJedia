@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Merchant;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -120,6 +121,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
+        Cart::where('product_id', $product->id)->delete();
         $product->delete();
 
         return redirect()->back();

@@ -43,17 +43,17 @@ class Merchant extends Model
 
     public function pendings()
     {
-        return $this->hasManyThrough(TransactionDetail::class, Product::class)->where('status', 'Pending');
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)->withTrashedParents()->where('status', 'Pending');
     }
 
     public function shippings()
     {
-        return $this->hasManyThrough(TransactionDetail::class, Product::class)->where('status', 'Shipping');
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)->withTrashedParents()->where('status', 'Shipping');
     }
 
     public function transactions()
     {
-        return $this->hasManyThrough(TransactionDetail::class, Product::class)
+        return $this->hasManyThrough(TransactionDetail::class, Product::class)->withTrashedParents()
             ->whereIn('status', ['Rejected', 'Completed']);
     }
 
