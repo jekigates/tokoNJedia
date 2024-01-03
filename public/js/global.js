@@ -49,3 +49,20 @@ function validateInputImage(input, imgId) {
     img.src = URL.createObjectURL(input.files[0]);
     return true;
 }
+
+function validateBoxImage(input, imgId) {
+    if (input.files.length === 0) {
+        return false;
+    }
+
+    if (input.files[0].size > 10000000) {
+        alert("File must not be more than 10 Megabytes.");
+        return false;
+    }
+
+    let img = document.createElement("img");
+    img.className = "w-full h-full object-cover";
+    img.src = URL.createObjectURL(input.files[0]);
+    $("#" + imgId).html(img);
+    return true;
+}

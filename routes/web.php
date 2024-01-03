@@ -139,6 +139,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('products', [Merchant\ProductController::class, 'index'])->name('products.index');
             Route::get('products/create', [Merchant\ProductController::class, 'create'])->name('products.create');
+            Route::post('products/store', [Merchant\ProductController::class, 'store'])->name('products.store');
         });
     });
 });

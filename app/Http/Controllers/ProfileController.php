@@ -51,7 +51,7 @@ class ProfileController extends Controller
             User::find(Auth::user()->id)->update(['phone' => $request->phone]);
         } else if ($request->image != null) {
             $validated = $request->validate([
-                'image' => ['required', 'file', 'max:' . (10 * 1024 * 1024)], // 1 GB = 1024 MB, 1 MB = 1024 KB
+                'image' => ['required', 'file', 'max:' . (10 * 1024 * 1024), 'mimes:jpg,jpeg,png'],
             ]);
 
             if (Auth::user()->image != null) {

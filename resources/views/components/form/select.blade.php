@@ -1,3 +1,3 @@
-<select name="" id="" {{ $attributes->merge(['class' => $selectClasses()]) }}>
+<select {{ $attributes->merge(['class' => $selectClasses()]) }}>
     {{ $slot }}
 </select>

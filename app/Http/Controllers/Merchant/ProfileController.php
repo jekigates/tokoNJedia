@@ -42,7 +42,7 @@ class ProfileController extends Controller
 
         if ($request->image != null) {
             $request->validate([
-                'image' => ['required', 'file', 'max:' . (10 * 1024 * 1024)], // 1 GB = 1024 MB, 1 MB = 1024 KB
+                'image' => ['required', 'file', 'max:' . (10 * 1024 * 1024), 'mimes:jpg,jpeg,png'],
             ]);
 
             if ($merchant->image != null) {
@@ -58,7 +58,7 @@ class ProfileController extends Controller
 
         if ($request->banner_image != null) {
             $request->validate([
-                'banner_image' => ['required', 'file', 'max:' . (10 * 1024 * 1024)], // 1 GB = 1024 MB, 1 MB = 1024 KB
+                'banner_image' => ['required', 'file', 'max:' . (10 * 1024 * 1024), 'mimes:jpg,jpeg,png'], // 1 GB = 1024 MB, 1 MB = 1024 KB
             ]);
 
             if ($merchant->banner_image != null) {

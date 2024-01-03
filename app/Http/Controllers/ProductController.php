@@ -9,8 +9,8 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        $recommendations = Product::all()->random(5);
         $product = Product::findOrFail($id);
+        $recommendations = Product::all()->random(5);
 
         return view('product.show', [
             'recommendations' => $recommendations,
