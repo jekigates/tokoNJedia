@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use App\Models\ProductPromo;
 use App\Models\ProductVariant;
 use App\Models\Promo;
+use Database\Factories\Traits\GeneratesImages;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class ProductFactory extends Factory
 {
+    use GeneratesImages;
     /**
      * Define the model's default state.
      *
@@ -37,23 +39,11 @@ class ProductFactory extends Factory
     {
         return $this->afterCreating(function (Product $product) {
             ProductImage::factory()->create([
-                'image' => function () {
-                    $filename = uniqid() . '.jpg';
-
-                    Storage::disk('public')->put('product-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
-
-                    return 'storage/product-images/' . $filename;
-                },
+                'image' => $this->generatePlaceholderImage('product-images', 400, 400),
                 'product_id' => $product->id,
             ]);
             ProductImage::factory()->create([
-                'image' => function () {
-                    $filename = uniqid() . '.jpg';
-
-                    Storage::disk('public')->put('product-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
-
-                    return 'storage/product-images/' . $filename;
-                },
+                'image' => $this->generatePlaceholderImage('product-images', 400, 400),
                 'product_id' => $product->id,
             ]);
             ProductVariant::factory()->create([

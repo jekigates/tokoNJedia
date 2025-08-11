@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Location;
 use App\Models\Merchant;
 use App\Models\User;
+use Database\Factories\Traits\GeneratesImages;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class MerchantFactory extends Factory
 {
+    use GeneratesImages;
     /**
      * Define the model's default state.
      *
@@ -24,20 +26,8 @@ class MerchantFactory extends Factory
 
         return [
             'name' => $this->faker->name(),
-            'image' => function () {
-                $filename = uniqid() . '.jpg';
-
-                $image = Storage::disk('public')->put('merchant/images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
-
-                return 'storage/merchant/images/' . $filename;
-            },
-            'banner_image' => function () {
-                $filename = uniqid() . '.jpg';
-
-                $image = Storage::disk('public')->put('merchant/banner-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
-
-                return 'storage/merchant/banner-images/' . $filename;
-            },
+            'image' => $this->generatePlaceholderImage('merchant/images', 300, 300),
+            'banner_image' => $this->generatePlaceholderImage('merchant/banner-images', 800, 300),
             'description' => $this->faker->text(50),
             'catch_phrase' => $this->faker->words(10, true),
             'full_description' => $this->faker->sentence(18),

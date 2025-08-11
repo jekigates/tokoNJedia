@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Database\Factories\Traits\GeneratesImages;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    use GeneratesImages;
     /**
      * Define the model's default state.
      *
@@ -30,13 +32,7 @@ class UserFactory extends Factory
             'username' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => $this->faker->password(),
-            'image' => function () {
-                $filename = uniqid() . '.jpg';
-
-                Storage::disk('public')->put('user-images/' . $filename, file_get_contents('https://source.unsplash.com/random'));
-
-                return 'storage/user-images/' . $filename;
-            },
+            'image' => $this->generatePlaceholderImage('user-images', 300, 300),
         ];
     }
 
