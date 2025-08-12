@@ -12,9 +12,7 @@
                 <div class="text-2xl mb-8 font-bold flex items-center justify-between">
                     <p id="modal-title"></p>
                     <button type="button" class="text-gray hover:text-primary" onclick="toggleModal()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
+                        <x-heroicon-o-x-circle class="w-8 h-8" />
                     </button>
                 </div>
 
@@ -88,9 +86,7 @@
                             <div class="flex items-center justify-center w-1/5">
                                 <label for="edit_product_image{{ $image }}" class="flex flex-col items-center justify-center w-full h-20 border-2 border-gray-light border-dashed rounded-lg cursor-pointer text-gray">
                                     <div class="flex flex-col items-center justify-center h-full w-full" id="div_edit_product_image{{ $image }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                        </svg>
+                                        <x-heroicon-o-document-plus class="w-6 h-6" />
                                         <p class="text-sm">Image {{ $image }}</p>
                                     </div>
                                     <input id="edit_product_image{{ $image }}" name="edit_product_images[]" type="file" class="hidden" accept=".jpg,.jpeg,.png" onchange="validateBoxImage(this, 'div_edit_product_image{{ $image }}')"/>
@@ -128,9 +124,7 @@
                             <div class="flex items-center justify-center w-1/5">
                                 <label class="flex flex-col items-center justify-center w-full h-20 border-2 border-gray-light border-dashed rounded-lg cursor-pointer text-gray">
                                     <div class="flex flex-col items-center justify-center h-full w-full" id="div_delete_product_image{{ $image }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                        </svg>
+                                        <x-heroicon-o-document-plus class="w-6 h-6" />
                                         <p class="text-sm">Image {{ $image }}</p>
                                     </div>
                                     <input id="delete_product_image{{ $image }}" name="delete_product_images[]" type="file" class="hidden" accept=".jpg,.jpeg,.png" onchange="validateBoxImage(this, 'div_delete_product_image{{ $image }}')" disabled/>
@@ -221,9 +215,7 @@
                                     <div class="flex justify-between">
                                         <p>Look Product Variant</p>
                                         <button onclick="toggleRow(this, 'row-product-{{ $product->id }}')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                            </svg>
+                                            <x-heroicon-o-chevron-down class="w-6 h-6" />
                                         </button>
                                     </div>
                                 </td>
