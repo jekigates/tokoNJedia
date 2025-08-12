@@ -176,19 +176,6 @@
                 // Effects
                 effect: 'slide',
                 speed: 500,
-
-                // Responsive breakpoints
-                breakpoints: {
-                    640: {
-                        slidesPerView: 1,
-                    },
-                    768: {
-                        slidesPerView: 1,
-                    },
-                    1024: {
-                        slidesPerView: 1,
-                    },
-                }
             });
 
             function updateTime()

@@ -36,7 +36,14 @@
                             @else
                                 <x-button variant="primary" href="{{ route('login.index') }}">Follow</x-button>
                             @endif
-                            <x-button variant="primary" outline>Chat Seller</x-button>
+                            @if (Auth::check())
+                                <form action="{{ route('chats.redirect', ['merchant_id' => $merchant->id]) }}" method="POST" class="inline">
+                                    @csrf
+                                    <x-button variant="primary" type="submit" outline>Chat Seller</x-button>
+                                </form>
+                            @else
+                                <x-button variant="primary" href="{{ route('login.index') }}" outline>Chat Seller</x-button>
+                            @endif
                         </div>
                     </div>
                 </div>

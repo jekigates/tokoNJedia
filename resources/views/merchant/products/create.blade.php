@@ -30,7 +30,7 @@
                 </div>
                 <div class="flex-grow">
                     <x-form.select name="category_id" required>
-                        <option value="">--- Product Category ---</option>
+                        <option value="" disabled selected hidden>--- Product Category ---</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
