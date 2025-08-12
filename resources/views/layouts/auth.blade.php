@@ -10,6 +10,6 @@
             @yield('content')
         </div>
 
-        <p class="text-primary font-semibold">&copy; DuTiSa, Breaking and Overcoming Challenges Through Courage, Hardwork, and Persistence</p>
+        <p class="text-primary font-semibold text-center">&copy; DuTiSa, Breaking and Overcoming Challenges Through Courage, Hardwork, and Persistence</p>
     </div>
 @endsection

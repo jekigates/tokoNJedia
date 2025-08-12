@@ -5,7 +5,7 @@
     <x-header :recommendations='$recommendations' />
 
     <div class="py-8 flex justify-center">
-        <div class="w-full max-w-screen-xl">
+        <div class="w-full max-w-screen-lg xl:max-w-screen-xl">
             @if ($sender->rooms->count() > 0)
                 <section class="flex rounded-lg border border-gray-light">
                     <div class="w-1/3 p-4 border-e border-gray-light ">

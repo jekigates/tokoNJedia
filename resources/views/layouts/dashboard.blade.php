@@ -9,7 +9,7 @@
     @endisset
 
     <div class="py-8 flex justify-center">
-        <div class="w-full max-w-screen-xl">
+        <div class="w-full max-w-screen-lg xl:max-w-screen-xl">
             @yield('content')
         </div>
     </div>

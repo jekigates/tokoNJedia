@@ -2,6 +2,34 @@
 
 @section('title', 'Product Detail')
 
+@push('styles')
+    <style>
+        /* Product image container for zoom effect */
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+
+        /* Main product image with cursor-following zoom */
+        .product-main-image {
+            transition: transform 0.1s ease;
+            cursor: pointer;
+            transform-origin: center center;
+        }
+
+        /* Thumbnail images with smooth transition */
+        .product-thumbnail {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .product-thumbnail:hover {
+            opacity: 0.8;
+        }
+    </style>
+@endpush
+
 @section('content')
     @php
         $lp = $product->lowestPriceVariant();
@@ -9,20 +37,24 @@
     @endphp
     <section class="flex gap-8">
         <div class="w-1/4">
-            <img
-                src="{{ asset($product->images[0]->image) }}"
-                alt=""
-                class="w-full h-80 object-cover rounded-lg mb-2"
-                id ="product_image"
-            />
+            <div class="product-image-container mb-2">
+                <img
+                    src="{{ asset($product->images[0]->image) }}"
+                    alt=""
+                    class="product-main-image w-full h-80 object-cover"
+                    id ="product_image"
+                    onmousemove="zoomImage(event)"
+                    onmouseleave="resetZoom()"
+                />
+            </div>
             <div class="flex gap-2">
                 @foreach ($product->images as $pi)
-                <img
-                    src="{{ asset($pi->image) }}"
-                    alt=""
-                    onmouseover="previewImage(event)"
-                    class="w-14 h-14 rounded-lg hover:border-2 hover:border-primary"
-                />
+                    <img
+                        src="{{ asset($pi->image) }}"
+                        alt=""
+                        onclick="previewImage(event)"
+                        class="product-thumbnail w-14 h-14 rounded-lg border-2 border-transparent hover:border-primary"
+                    />
                 @endforeach
             </div>
         </div>
@@ -281,7 +313,36 @@
 
         function previewImage(e)
         {
-            document.querySelector('#product_image').setAttribute('src', event.target.getAttribute('src'));
+            const mainImage = document.querySelector('#product_image');
+            const newSrc = event.target.getAttribute('src');
+
+            // Add smooth transition when changing image
+            mainImage.style.transition = 'opacity 0.2s ease';
+            mainImage.style.opacity = '0.5';
+
+            setTimeout(() => {
+                mainImage.setAttribute('src', newSrc);
+                mainImage.style.opacity = '1';
+            }, 100);
+        }
+
+        function zoomImage(e) {
+            const image = e.target;
+            const rect = image.getBoundingClientRect();
+
+            // Calculate cursor position relative to image
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            // Apply zoom and set transform origin to cursor position
+            image.style.transform = 'scale(2)';
+            image.style.transformOrigin = `${x}% ${y}%`;
+        }
+
+        function resetZoom() {
+            const image = document.querySelector('#product_image');
+            image.style.transform = 'scale(1)';
+            image.style.transformOrigin = 'center center';
         }
     </script>
 @endpush

@@ -1,6 +1,6 @@
 
 <footer class="border-t border-t-gray-light flex justify-center">
-    <div class="w-full max-w-screen-xl flex gap-16 py-8">
+    <div class="w-full max-w-screen-lg xl:max-w-screen-xl flex gap-16 py-8">
         <div>
             <p class="text-xl font-bold mb-2 text-black">TokoNJedia</p>
             <ul class="text-gray text-sm">

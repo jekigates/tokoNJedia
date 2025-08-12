@@ -7,7 +7,7 @@
     <x-header :recommendations='$recommendations' />
 
     <div class="py-8 flex justify-center">
-        <div class="w-full max-w-screen-xl">
+        <div class="w-full max-w-screen-lg xl:max-w-screen-xl">
             <section class="flex gap-8">
                 <div class="w-1/3 border border-gray-light rounded-lg p-4 text-black">
                     <div class="flex items-center gap-4 mb-4">
