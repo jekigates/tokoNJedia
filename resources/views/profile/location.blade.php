@@ -4,6 +4,10 @@
 
 @section('location', 'text-primary')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/leaflet.css') }}" />
+@endpush
+
 @section('modals')
     <div class="fixed top-0 left-0 bg-black/50 z-50 hidden" id="modal">
         <div class="flex w-screen h-screen items-center justify-center">
@@ -17,25 +21,25 @@
                 </div>
                 <div class="flex justify-evenly mb-4 text-black">
                     <div class="text-center inline-flex flex-col items-center">
-                        <button class="border border-primary rounded-full text-primary h-8 w-8 flex items-center justify-center mb-1" id="button-pinpoint-location">1</button>
+                        <button type="button" class="border border-primary rounded-full text-primary h-8 w-8 flex items-center justify-center mb-1 cursor-pointer" id="button-pinpoint-location" onclick="goToStep(1)">1</button>
                         <p class="text-xs">Pinpoint location</p>
                     </div>
                     <div class="text-center inline-flex flex-col items-center">
-                        <button class="border border-primary rounded-full text-white bg-gray-light h-8 w-8 flex items-center justify-center mb-1">2</button>
+                        <button type="button" class="border border-primary rounded-full text-white bg-gray-light h-8 w-8 flex items-center justify-center mb-1 cursor-pointer" id="button-complete-address" onclick="goToStep(2)">2</button>
                         <p class="text-xs">Complete address detail</p>
                     </div>
                 </div>
                 <hr class="mb-4">
                 <div class="" id="tab-pinpoint-location">
                     <p class="mb-4 text-lg font-bold text-black">Please Confirm this is your address?</p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.975452942829!2d106.60240637399052!3d-6.266958593721699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69fcf537584e4f%3A0xb5876d02e74ff281!2sCluster%20Alloggio%20Kost%20Gading%20Serpong!5e0!3m2!1sid!2sid!4v1703840150169!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-64 rounded-lg mb-2"></iframe>
+                    <div id="map" class="w-full h-64 rounded-lg mb-4"></div>
                     <div class="flex justify-evenly text-gray text-sm mb-4">
-                        <p>Latitude: <span class="latitude"></span></p>
-                        <p>Longitude: <span class="longitude"></span></p>
+                        <p>Latitude: <span class="latitude">Loading...</span></p>
+                        <p>Longitude: <span class="longitude">Loading...</span></p>
                     </div>
-                    <x-button variant="primary" onclick="moveTab()" block>Confirm Location</x-button>
+                    <x-button variant="primary" onclick="goToStep(2)" block>Confirm Location</x-button>
                 </div>
-                <form class="hidden" id="tab-complete-address-detail" action="{{ route('locations.store') }}" method="POST" onsubmit="addNewAddress(event)">
+                <form class="hidden" id="tab-complete-address-detail" action="{{ route('locations.store') }}" method="POST">
                     @csrf
 
                     <p class="mb-4 text-lg font-bold text-black">Please Confirm this is your address?</p>
@@ -105,40 +109,158 @@
 @endsection
 
 @push('scripts')
-    <script>
-        function moveTab() {
-            if (getLocation()) {
-                document.querySelector('#button-pinpoint-location').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>';
-                document.querySelector('#button-pinpoint-location').className = 'border border-primary bg-primary rounded-full text-white h-8 w-8 flex items-center justify-center mb-1';
-                document.querySelector('#tab-pinpoint-location').classList.add('hidden');
-                document.querySelector('#tab-complete-address-detail').classList.remove('hidden');
+<script src="{{ asset('js/leaflet.js') }}"></script>
+
+<script>
+    let map;
+    let marker;
+    let latitude = null;
+    let longitude = null;
+
+    // Default coordinates (Jakarta, Indonesia) - fallback if geolocation fails
+    const defaultCoords = {
+        lat: -6.2088,
+        lng: 106.8456
+    };
+
+    // Initialize the map
+    function initMap() {
+        // Start with default coordinates
+        const initialLat = latitude || defaultCoords.lat;
+        const initialLng = longitude || defaultCoords.lng;
+
+        map = L.map('map').setView([initialLat, initialLng], 15);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add initial marker
+        marker = L.marker([initialLat, initialLng], {
+            draggable: true
+        }).addTo(map);
+
+        // Set initial coordinates
+        latitude = initialLat;
+        longitude = initialLng;
+        updateCoordinateDisplay();
+
+        // Update coordinates when marker is dragged
+        marker.on('dragend', function(e) {
+            const position = e.target.getLatLng();
+            latitude = position.lat;
+            longitude = position.lng;
+            updateCoordinateDisplay();
+        });
+
+        // Add click event to place marker
+        map.on('click', function(e) {
+            latitude = e.latlng.lat;
+            longitude = e.latlng.lng;
+            marker.setLatLng([latitude, longitude]);
+            updateCoordinateDisplay();
+        });
+
+        // Try to get user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Success callback
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    map.setView([latitude, longitude], 15);
+                    marker.setLatLng([latitude, longitude]);
+                    updateCoordinateDisplay();
+                },
+                function(error) {
+                    // Error callback
+                    console.warn('Geolocation failed:', error.message);
+                    console.log('Using default coordinates:', defaultCoords.lat, defaultCoords.lng);
+                    // Coordinates are already set to default values
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        } else {
+            console.warn('Geolocation is not supported by this browser');
+            console.log('Using default coordinates:', defaultCoords.lat, defaultCoords.lng);
+        }
+    }
+
+    function updateCoordinateDisplay() {
+        if (latitude !== null && longitude !== null) {
+            document.querySelector('.latitude').textContent = latitude.toFixed(6);
+            document.querySelector('.longitude').textContent = longitude.toFixed(6);
+        } else {
+            document.querySelector('.latitude').textContent = 'Loading...';
+            document.querySelector('.longitude').textContent = 'Loading...';
+        }
+    }
+
+    // Initialize map when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        initMap();
+        updateCoordinateDisplay();
+    });
+
+    function goToStep(stepNumber) {
+        if (stepNumber === 1) {
+            // Show step 1, hide step 2
+            document.getElementById('tab-pinpoint-location').classList.remove('hidden');
+            document.getElementById('tab-complete-address-detail').classList.add('hidden');
+
+            // Update step 1 button (active)
+            document.querySelector('#button-pinpoint-location').innerHTML = '1';
+            document.querySelector('#button-pinpoint-location').className = 'border border-primary rounded-full text-primary h-8 w-8 flex items-center justify-center mb-1 cursor-pointer';
+
+            // Update step 2 button (inactive)
+            document.querySelector('#button-complete-address').innerHTML = '2';
+            document.querySelector('#button-complete-address').className = 'border border-primary rounded-full text-white bg-gray-light h-8 w-8 flex items-center justify-center mb-1 cursor-pointer';
+
+            // Refresh map size when going back to step 1
+            setTimeout(() => {
+                if (map) {
+                    map.invalidateSize();
+                }
+            }, 100);
+
+        } else if (stepNumber === 2) {
+            // Only allow going to step 2 if coordinates are valid
+            if (latitude === null || longitude === null) {
+                alert('Please confirm your location first before proceeding to step 2.');
+                return;
             }
+
+            // Update hidden inputs with current coordinates
+            document.querySelector('input[name="latitude"]').value = latitude;
+            document.querySelector('input[name="longitude"]').value = longitude;
+
+            // Show step 2, hide step 1
+            document.getElementById('tab-pinpoint-location').classList.add('hidden');
+            document.getElementById('tab-complete-address-detail').classList.remove('hidden');
+
+            // Update step 1 button (completed)
+            document.querySelector('#button-pinpoint-location').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>';
+            document.querySelector('#button-pinpoint-location').className = 'border border-primary bg-primary rounded-full text-white h-8 w-8 flex items-center justify-center mb-1 cursor-pointer';
+
+            // Update step 2 button (active)
+            document.querySelector('#button-complete-address').innerHTML = '2';
+            document.querySelector('#button-complete-address').className = 'border border-primary rounded-full text-primary h-8 w-8 flex items-center justify-center mb-1 cursor-pointer';
         }
+    }
 
-        function addNewAddress(e) {
-            e.preventDefault();
+    function toggleModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.toggle('hidden');
 
-            if (getLocation()) {
-                e.target.submit();
-            }
+        // Reset to first tab when opening modal
+        if (!modal.classList.contains('hidden')) {
+            goToStep(1);
         }
-
-        function toggleModal()
-        {
-            if (getLocation()) {
-                var modal = document.querySelector('#modal');
-
-                $(modal).fadeToggle();
-            }
-        }
-
-        function showPosition(position) {
-            document.querySelectorAll(".latitude").forEach((element) => {
-                element.innerHTML = element.value = position.coords.latitude;
-            });
-            document.querySelectorAll(".longitude").forEach((element) => {
-                element.innerHTML = element.value = position.coords.longitude;
-            });
-        }
-    </script>
+    }
+</script>
 @endpush

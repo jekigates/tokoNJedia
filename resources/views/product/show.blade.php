@@ -27,6 +27,23 @@
         .product-thumbnail:hover {
             opacity: 0.8;
         }
+
+        /* Remove default arrows from number input */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* Button states for quantity controls */
+        .qty-btn-disabled {
+            cursor: not-allowed !important;
+            opacity: 0.5;
+        }
     </style>
 @endpush
 
@@ -202,16 +219,21 @@
 
                 <div class="flex gap-4 items-center mb-4">
                     <div class="inline-flex items-center border border-gray-light rounded-md">
-                        <button onclick="changeQty(this.innerHTML)" type="button" class="text-primary px-2 text-2xl">-</button>
+                        <button onclick="changeQty('-')" type="button" id="qty-decrease" class="text-primary p-2 hover:bg-gray-light flex items-center justify-center">
+                            <x-heroicon-o-minus class="w-4 h-4" />
+                        </button>
                         <input
                             type="number"
                             name="product_quantity"
                             id="product-quantity"
                             value="1"
+                            min="1"
                             class="text-center w-16 focus:outline-none"
                             oninput="changeQty('')"
                         />
-                        <button onclick="changeQty(this.innerHTML)" type="button" class="text-primary px-2 text-2xl">+</button>
+                        <button onclick="changeQty('+')" type="button" id="qty-increase" class="text-primary p-2 hover:bg-gray-light flex items-center justify-center">
+                            <x-heroicon-o-plus class="w-4 h-4" />
+                        </button>
                     </div>
                     <p class="text-black">
                         Stock Total: <span class="font-bold" id="product-total-stock">{{ $lp->stock }}</span>
@@ -257,21 +279,60 @@
             productQuantity = document.querySelector('#product-quantity');
             subtotalNewPrice = document.querySelector('#subtotal-new-price');
             subtotalOriginalPrice = document.querySelector('#subtotal-original-price');
+
+            // Initialize button states
+            updateQtyButtonStates();
         }
 
         function changeQty(task, vPrice) {
-            if (task === '+' && productQuantity.value < parseInt(productTotalStock.innerHTML)) {
-                productQuantity.value++;
-            } else if (task === "-" && productQuantity.value != 1) {
-                productQuantity.value--;
+            const currentQty = parseInt(productQuantity.value);
+            const maxStock = parseInt(productTotalStock.innerHTML);
+
+            if (task === '+' && currentQty < maxStock) {
+                productQuantity.value = currentQty + 1;
+            } else if (task === "-" && currentQty > 1) {
+                productQuantity.value = currentQty - 1;
+            } else if (task === '') {
+                // Handle direct input - ensure it's within bounds
+                let inputValue = parseInt(productQuantity.value);
+                if (inputValue < 1) {
+                    productQuantity.value = 1;
+                } else if (inputValue > maxStock) {
+                    productQuantity.value = maxStock;
+                }
             }
 
+            // Update subtotal
             var newPrice = parseInt(productNewPrice.innerHTML.trim().replace(/\D/g,''));
             subtotalNewPrice.innerHTML = formatRupiah(newPrice * productQuantity.value);
 
             if (productOriginalPrice != null) {
                 var originalPrice = parseInt(productOriginalPrice.innerHTML.trim().replace(/\D/g,''));
                 subtotalOriginalPrice.innerHTML = formatRupiah(originalPrice * productQuantity.value);
+            }
+
+            // Update button states
+            updateQtyButtonStates();
+        }
+
+        function updateQtyButtonStates() {
+            const decreaseBtn = document.querySelector('#qty-decrease');
+            const increaseBtn = document.querySelector('#qty-increase');
+            const currentQty = parseInt(productQuantity.value);
+            const maxStock = parseInt(productTotalStock.innerHTML);
+
+            // Update decrease button state
+            if (currentQty <= 1) {
+                decreaseBtn.classList.add('qty-btn-disabled');
+            } else {
+                decreaseBtn.classList.remove('qty-btn-disabled');
+            }
+
+            // Update increase button state
+            if (currentQty >= maxStock) {
+                increaseBtn.classList.add('qty-btn-disabled');
+            } else {
+                increaseBtn.classList.remove('qty-btn-disabled');
             }
         }
 
@@ -295,6 +356,9 @@
             });
 
             document.querySelector("#variant-id").value = vId;
+
+            // Update button states when variant changes
+            updateQtyButtonStates();
         }
 
         function previewImage(e)
