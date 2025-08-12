@@ -3,59 +3,83 @@
 @section('title', 'Home')
 
 @push('styles')
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="{{ asset('css/swiper-bundle.min.css') }}">
+
     <style>
-        .slider {
-            display: flex;
-            aspect-ratio: 16 / 5;
-            overflow-x: hidden;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.25);
+        /* Custom Swiper Navigation Buttons */
+        .swiper-button-next,
+        .swiper-button-prev {
+            width: 40px !important;
+            height: 40px !important;
+            background: white !important;
+            border-radius: 50% !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+            margin-top: -20px !important;
         }
 
-        .slider img {
-            scroll-snap-align: start;
-            object-fit: cover;
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            color: #6b7280 !important;
         }
 
-        .slider-nav {
-            display: flex;
-            column-gap: 1rem;
-            position: absolute;
-            bottom: 1.25rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: #f9fafb !important;
         }
 
-        .slider-nav a {
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 50%;
-            background-color: #fff;
-            opacity: 0.75;
-            transition: opacity ease 250ms;
+        .swiper-button-prev {
+            left: 16px !important;
         }
 
-        .slider-nav a:hover {
-            opacity: 1;
+        .swiper-button-next {
+            right: 16px !important;
+        }
+
+        /* Custom pagination styling */
+        .swiper-pagination {
+            bottom: 20px !important;
+            left: 20px !important;
+            width: auto !important;
+            text-align: left !important;
+        }
+
+        .swiper-pagination-bullet {
+            width: 8px !important;
+            height: 8px !important;
+            background: white !important;
+            opacity: 0.5 !important;
+            margin: 0 4px !important;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1 !important;
         }
     </style>
 @endpush
 
 @section('content')
+    <!-- Swiper.js Slider -->
     <section class="relative mt-0 mb-8 mx-auto">
-        <div class="slider rounded-lg">
-            @foreach ($promos as $key => $promo)
-                <a href="{{ route('promos.index', ['id' => $promo->id]) }}" style="flex: 1 0 100%">
-                    <img id="slide-{{ $key }}" src="{{ asset($promo->promo_image) }}" alt="" class="cursor-pointer w-full h-full">
-                </a>
-            @endforeach
-        </div>
-        <div class="slider-nav">
-            @foreach ($promos as $key => $promo)
-                <a href="#slide-{{ $key }}"></a>
-            @endforeach
+        <div class="swiper" id="promos-swiper">
+            <div class="swiper-wrapper">
+                @foreach ($promos as $key => $promo)
+                    <div class="swiper-slide">
+                        <a href="{{ route('promos.index', ['id' => $promo->id]) }}">
+                            <img src="{{ asset($promo->promo_image) }}" alt="" class="cursor-pointer w-full h-full object-cover aspect-[16/5] rounded-lg">
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Swiper Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+            <!-- Swiper Pagination -->
+            <div class="swiper-pagination"></div>
         </div>
     </section>
 
@@ -120,9 +144,52 @@
 
 @push('scripts')
     @include('product.script')
+
+    <!-- Swiper JS -->
+    <script src="{{ asset('js/swiper-bundle.min.js') }}"></script>
+
     <script>
         $(document).ready(function () {
             updateTime();
+
+            // Initialize Swiper
+            const swiper = new Swiper('#promos-swiper', {
+                // Optional parameters
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                // Pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+
+                // Effects
+                effect: 'slide',
+                speed: 500,
+
+                // Responsive breakpoints
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 1,
+                    },
+                    1024: {
+                        slidesPerView: 1,
+                    },
+                }
+            });
 
             function updateTime()
             {
@@ -130,7 +197,7 @@
 
                 let hourLeft = {{ $hourLeft }};
                 let minuteLeft = {{ $minuteLeft }};
-                let secondLeft = {{ $hourLeft }};
+                let secondLeft = {{ $secondLeft }};
 
                 setInterval(() => {
                     d = new Date();
