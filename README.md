@@ -12,8 +12,6 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Mockup Screenshot](#mockup-screenshot)
-3. [Prerequisite](#prerequisite)
-4. [How to Run Project Locally](#how-to-run-project-locally)
 
 ## Project Overview
 
